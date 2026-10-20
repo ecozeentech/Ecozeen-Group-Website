@@ -1,0 +1,156 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+@import '@fontsource/manrope/800.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Fallback brand tokens; overridden at runtime by ThemeSetting via
+           resources/views/components/theme-variables.blade.php so CMS theme
+           changes apply without a frontend rebuild. */
+        --color-primary: #0F172A;
+        --color-secondary: #2563EB;
+        --color-accent: #38BDF8;
+        --color-success: #15803D;
+        --color-text: #111827;
+        --color-text-muted: #64748B;
+        --color-background: #F8FAFC;
+        --color-surface: #FFFFFF;
+        --color-border: #E2E8F0;
+        --font-heading: 'Manrope', sans-serif;
+        --font-body: 'Inter', sans-serif;
+        --container-width: 1280px;
+        --radius-base: 0.5rem;
+        --section-spacing: 6rem;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-surface-canvas text-ink font-sans antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-heading;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-secondary);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    .container-site {
+        @apply mx-auto w-full max-w-container px-4 sm:px-6 lg:px-12;
+    }
+
+    .section-spacing {
+        padding-top: var(--section-spacing);
+        padding-bottom: var(--section-spacing);
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-token px-5 py-2.5 text-sm font-semibold transition duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    .btn-primary {
+        @apply btn bg-brand-navy text-white hover:bg-slate-800 focus-visible:outline-brand-blue;
+    }
+
+    .btn-secondary {
+        @apply btn bg-brand-blue text-white hover:bg-blue-700 focus-visible:outline-brand-blue;
+    }
+
+    .btn-outline {
+        @apply btn border border-slate-300 bg-white text-ink hover:bg-slate-50 focus-visible:outline-brand-blue;
+    }
+
+    .btn-destructive {
+        @apply btn border border-red-300 bg-red-50 text-red-600 hover:bg-red-100 focus-visible:outline-red-500;
+    }
+
+    .card {
+        @apply rounded-token border border-surface-border bg-surface shadow-level1;
+    }
+
+    .badge {
+        @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide;
+    }
+
+    .badge-success {
+        @apply badge bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200;
+    }
+
+    .badge-info {
+        @apply badge bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200;
+    }
+
+    .badge-neutral {
+        @apply badge bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-200;
+    }
+
+    .badge-danger {
+        @apply badge bg-red-50 text-red-700 ring-1 ring-inset ring-red-200;
+    }
+
+    .form-label {
+        @apply mb-1.5 block text-sm font-medium text-ink;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+        /* Opacity modifiers (e.g. ring-brand-blue/20) cannot be used inside
+           @apply, since the custom brand colors reference CSS variables
+           rather than literal color values that Tailwind can derive an
+           alpha channel from. focus:ring-opacity-20 achieves the same
+           translucent focus ring without that restriction. */
+        @apply block w-full rounded-token border-slate-300 text-sm text-ink shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue focus:ring-opacity-20;
+    }
+
+    .form-hint {
+        @apply mt-1 text-xs text-ink-muted;
+    }
+
+    .form-error {
+        @apply mt-1 text-xs font-medium text-red-600;
+    }
+
+    .admin-nav-link {
+        @apply flex items-center gap-3 rounded-token px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white;
+    }
+
+    .admin-nav-link.active {
+        @apply bg-slate-800 text-white;
+    }
+
+    .admin-table th {
+        @apply bg-slate-50 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-ink-muted;
+    }
+
+    .admin-table td {
+        @apply px-4 py-3 text-sm text-ink;
+    }
+
+    .admin-table tbody tr {
+        @apply border-t border-surface-border hover:bg-slate-50;
+    }
+}
