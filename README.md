@@ -1,58 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ecozeen Group — Website, CMS & Admin Dashboard
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel 13 / PHP 8.3 application that serves the public Ecozeen Group corporate
+website and a custom, section-based content management system and admin
+dashboard. Marketing copy, pages, navigation, theme styling, SEO metadata,
+legal content, and the company/product/service/project directories are all
+editable from `/admin` — no code changes or deployments required for routine
+content updates.
 
-## About Laravel
+## Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend:** Laravel 13, PHP 8.3
+- **Database:** MySQL 8
+- **Frontend:** Blade, Tailwind CSS, Alpine.js, Livewire
+- **Authorization:** [Spatie laravel-permission](https://spatie.be/docs/laravel-permission) (role/permission based RBAC)
+- **Testing:** PHPUnit (Feature + Unit), SQLite in-memory for the test run
+- **Code style:** [Laravel Pint](https://laravel.com/docs/pint)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Section-based page builder** — 21+ reusable section types (hero, rich
+  text, image/text, galleries, collections, FAQs, stats, testimonials, CTAs,
+  forms, etc.), each with a server-side schema in
+  `app/Support/PageBuilder/SectionTypeRegistry.php`. Unknown fields are
+  stripped and rich text is purified (`stevebauman/purify`) before anything is
+  persisted or rendered — the browser is never trusted.
+- **Revisions** — every settings/content update snapshots the previous page
+  state (page attributes + ordered sections) to `content_revisions`, with a
+  one-click restore.
+- **Duplicate / publish / unpublish** workflows, homepage exclusivity (only
+  one page can be the homepage at a time), and scheduled publishing for
+  pages and blog posts.
+- **Centralized theme settings** — brand colors, fonts, spacing, and
+  container width are stored in the database and rendered as CSS custom
+  properties (`resources/views/components/theme-variables.blade.php`); the
+  Tailwind config consumes the same variables, and only an explicit allow-list
+  of values is ever accepted (`ThemeSetting::allowedOptions()`).
+- **Full admin dashboard** for companies, products, services, projects (with
+  categories/tags), blog, global/reusable sections, navigation menus, job
+  listings & applications, contact inquiries, newsletter subscribers,
+  redirects, media, website/theme settings, users, roles, and an activity
+  log.
+- **RBAC** — 8 seeded roles (Super Administrator, Administrator, Content
+  Manager, Editor, Author, SEO Manager, Inquiry Manager, Read-only Analyst),
+  enforced via Laravel Policies and Spatie permissions. Super Administrators
+  cannot delete their own account or grant themselves additional roles.
+- **Public inbound forms** — contact, newsletter signup, and job
+  applications, each protected by an invisible honeypot field and an
+  explicit consent checkbox. Job application resumes (PDF only) are stored on
+  a **private** disk and are only ever downloadable through an
+  authenticated, policy-checked admin route — never via a public URL.
+- **Technical SEO** — per-page/entity meta title/description, canonical URL,
+  `noindex` flag, OG image, an auto-generated `sitemap.xml`, and a
+  `robots.txt` driven by a site-wide search-indexing toggle.
+- **Accurate, non-fabricated seed data** for the real Ecozeen Group entities
+  (Ecozeen Swap, Transvoo, AccountSwift, Ecozeen Tech UK/Nigeria,
+  PlaySnooker, Ecozeen Mining, Ecozeen Agro Allied). No phone numbers,
+  physical addresses, legal registrations, financial figures, or customer
+  quotes have been invented — those fields are intentionally left blank
+  until supplied by the business and entered through the admin.
 
-## Learning Laravel
+## Local setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+**Requirements:** PHP 8.3+, Composer 2, Node 18+/npm, MySQL 8 (or another
+Laravel-supported database).
 
 ```bash
-composer require laravel/boost --dev
+composer install
+npm install
 
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Edit `.env` and point `DB_*` at your database (create an empty database named
+in `DB_DATABASE` first), then:
 
-## Contributing
+```bash
+php artisan migrate --seed
+npm run build   # or `npm run dev` while developing
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Create your first administrator account (see
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for why this is a dedicated
+command rather than a seeder):
 
-## Code of Conduct
+```bash
+php artisan ecozeen:create-admin
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Serve the app:
 
-## Security Vulnerabilities
+```bash
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Visit `http://localhost:8000` for the public site and
+`http://localhost:8000/admin` for the dashboard.
 
-## License
+## Testing
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan test
+```
+
+The test suite uses an in-memory SQLite database and the `array` cache/mail
+drivers (see `phpunit.xml`), so it never touches your configured MySQL
+database.
+
+Run the code style checker:
+
+```bash
+vendor/bin/pint --test   # check only
+vendor/bin/pint          # auto-fix
+```
+
+## Project structure (CMS-relevant highlights)
+
+| Path | Purpose |
+| --- | --- |
+| `app/Support/PageBuilder/SectionTypeRegistry.php` | Authoritative schema + sanitizer for every page-builder section type |
+| `app/Http/Controllers/Admin/*` | Admin dashboard CRUD controllers |
+| `app/Http/Controllers/Site/*` | Public site controllers |
+| `app/Policies/*` | RBAC authorization rules |
+| `database/seeders/RolesAndPermissionsSeeder.php` | The 8 roles and their permission sets |
+| `database/seeders/*Seeder.php` | Idempotent seed data for companies, products, services, projects, pages, navigation, blog, jobs, and settings |
+| `resources/views/admin/*` | Admin dashboard Blade views, including the page-builder UI |
+| `resources/views/site/*` | Public site Blade views |
+| `config/ecozeen.php` | App-specific configuration (media disks/limits, SEO defaults) |
+
+## Documentation
+
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — production deployment,
+  environment reference, backup & recovery, and the first-admin bootstrap
+  procedure.

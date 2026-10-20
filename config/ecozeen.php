@@ -1,14 +1,6 @@
 <?php
 
 return [
-    /*
-     * Optional bootstrap administrator account. When both an email and
-     * password are present in the environment, the roles seeder will
-     * create (or ensure) this user exists with the Super Administrator
-     * role. Leave unset in production after the first deployment.
-     */
-    'super_admin_email' => env('ECOZEEN_SUPER_ADMIN_EMAIL'),
-
     'media' => [
         'disk' => env('MEDIA_DISK', 'public'),
         'private_disk' => env('PRIVATE_DISK', 'local'),
