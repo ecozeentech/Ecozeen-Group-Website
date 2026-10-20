@@ -12,9 +12,7 @@ class NewsletterWelcomeMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public NewsletterSubscriber $subscriber)
-    {
-    }
+    public function __construct(public NewsletterSubscriber $subscriber) {}
 
     public function build(): self
     {

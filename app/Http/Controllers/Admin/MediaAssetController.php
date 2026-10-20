@@ -9,6 +9,8 @@ use App\Services\ActivityLogger;
 use App\Services\MediaUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MediaAssetController extends Controller
@@ -67,7 +69,7 @@ class MediaAssetController extends Controller
             return back()->with('error', "This file is referenced by {$usageCount} other record(s) and cannot be deleted until those references are removed.");
         }
 
-        \Illuminate\Support\Facades\Storage::disk($medium->disk)->delete($medium->path);
+        Storage::disk($medium->disk)->delete($medium->path);
         $filename = $medium->original_filename;
         $medium->delete();
 
@@ -91,11 +93,11 @@ class MediaAssetController extends Controller
         $count = 0;
         foreach ($foreignKeyTables as $table => $columns) {
             foreach ($columns as $column) {
-                $count += \Illuminate\Support\Facades\DB::table($table)->where($column, $medium->id)->count();
+                $count += DB::table($table)->where($column, $medium->id)->count();
             }
         }
 
-        $count += \Illuminate\Support\Facades\DB::table('project_media')->where('media_asset_id', $medium->id)->count();
+        $count += DB::table('project_media')->where('media_asset_id', $medium->id)->count();
 
         return $count;
     }

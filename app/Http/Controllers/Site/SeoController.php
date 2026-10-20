@@ -68,7 +68,7 @@ class SeoController extends Controller
         $settings = WebsiteSetting::current();
 
         $lines = $settings->search_indexing_enabled
-            ? ["User-agent: *", 'Allow: /', 'Disallow: /admin', 'Sitemap: '.route('sitemap')]
+            ? ['User-agent: *', 'Allow: /', 'Disallow: /admin', 'Sitemap: '.route('sitemap')]
             : ['User-agent: *', 'Disallow: /'];
 
         return $responseFactory->make(implode("\n", $lines)."\n", 200, ['Content-Type' => 'text/plain']);

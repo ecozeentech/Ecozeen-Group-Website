@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProjectRequest;
 use App\Models\Company;
+use App\Models\MediaAsset;
 use App\Models\Project;
 use App\Models\ProjectCategory;
 use App\Models\Service;
@@ -84,7 +85,7 @@ class ProjectController extends Controller
             'companies' => Company::orderBy('name')->get(),
             'categories' => ProjectCategory::orderBy('name')->get(),
             'services' => Service::orderBy('name')->get(),
-            'mediaLibrary' => \App\Models\MediaAsset::where('mime_type', 'like', 'image/%')->latest()->limit(100)->get(),
+            'mediaLibrary' => MediaAsset::where('mime_type', 'like', 'image/%')->latest()->limit(100)->get(),
         ]);
     }
 

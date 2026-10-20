@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Site;
 
-use App\Http\Requests\Site\NewsletterSubscribeRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Site\NewsletterSubscribeRequest;
 use App\Mail\NewsletterWelcomeMail;
 use App\Models\NewsletterSubscriber;
 use Illuminate\Http\RedirectResponse;

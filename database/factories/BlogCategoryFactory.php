@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\BlogCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\BlogCategory>
+ * @extends Factory<BlogCategory>
  */
 class BlogCategoryFactory extends Factory
 {

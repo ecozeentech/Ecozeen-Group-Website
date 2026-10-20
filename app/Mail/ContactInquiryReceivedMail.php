@@ -12,9 +12,7 @@ class ContactInquiryReceivedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public ContactInquiry $inquiry)
-    {
-    }
+    public function __construct(public ContactInquiry $inquiry) {}
 
     public function build(): self
     {

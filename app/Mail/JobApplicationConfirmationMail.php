@@ -12,9 +12,7 @@ class JobApplicationConfirmationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public JobApplication $application)
-    {
-    }
+    public function __construct(public JobApplication $application) {}
 
     public function build(): self
     {

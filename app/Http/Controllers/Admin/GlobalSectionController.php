@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\GlobalSectionRequest;
 use App\Models\GlobalSection;
 use App\Services\ActivityLogger;
 use App\Support\PageBuilder\SectionTypeRegistry;
-use App\Http\Controllers\Admin\PageSectionController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
