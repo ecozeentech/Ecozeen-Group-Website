@@ -31,7 +31,7 @@ export default {
                     navy: 'var(--color-primary, #0F172A)',
                     blue: 'var(--color-secondary, #2563EB)',
                     cyan: 'var(--color-accent, #38BDF8)',
-                    emerald: 'var(--color-success, #15803D)',
+                    emerald: 'var(--color-success, #10B981)',
                 },
                 surface: {
                     canvas: 'var(--color-background, #F8FAFC)',

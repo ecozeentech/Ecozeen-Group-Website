@@ -57,7 +57,7 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        [$fields, $categoryIds] = $this->prepareData($request);
+        [$fields, $categoryIds] = $this->prepareData($request, $product);
 
         $product->update($fields);
         $product->categories()->sync($categoryIds);
@@ -85,16 +85,27 @@ class ProductController extends Controller
         ]);
     }
 
-    private function prepareData(ProductRequest $request): array
+    private function prepareData(ProductRequest $request, ?Product $product = null): array
     {
         $data = $request->validated();
         $categoryIds = $data['category_ids'] ?? [];
         unset($data['category_ids'], $data['logo_media_id_upload'], $data['screenshot_media_id_upload'], $data['seo_image_media_id_upload']);
 
-        $data['features'] = array_values(array_filter($data['features'] ?? []));
-        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'products');
-        $data['screenshot_media_id'] = $this->resolveMediaId($request, 'screenshot_media_id', 'products');
-        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo');
+        if (array_key_exists('features_raw', $data)) {
+            $data['features'] = array_values(array_filter(array_map(
+                'trim',
+                preg_split('/\r\n|\r|\n/', (string) $data['features_raw']) ?: []
+            )));
+        } elseif (array_key_exists('features', $data)) {
+            $data['features'] = array_values(array_filter($data['features'] ?? []));
+        } else {
+            unset($data['features']);
+        }
+        unset($data['features_raw']);
+
+        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'products', $product?->logo_media_id);
+        $data['screenshot_media_id'] = $this->resolveMediaId($request, 'screenshot_media_id', 'products', $product?->screenshot_media_id);
+        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo', $product?->seo_image_media_id);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['no_index'] = $request->boolean('no_index');
 

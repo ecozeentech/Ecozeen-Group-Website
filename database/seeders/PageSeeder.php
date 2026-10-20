@@ -33,14 +33,15 @@ class PageSeeder extends Seeder
             [
                 'type' => 'hero',
                 'settings' => [
-                    'eyebrow' => 'Ecozeen Group',
-                    'heading' => 'A diversified group building across fintech, technology, and beyond.',
+                    'eyebrow' => 'Diversified Enterprise Conglomerate',
+                    'heading' => "One Group.\nMultiple Solutions.\nInfinite Possibilities.",
                     'subheading' => '<p>Ecozeen Group oversees a portfolio of operating businesses spanning financial technology, enterprise IT services, leisure, mining, and agriculture.</p>',
-                    'primary_label' => 'Explore Our Companies',
+                    'primary_label' => 'Explore Our Group',
                     'primary_url' => '/companies',
-                    'secondary_label' => 'Contact Us',
-                    'secondary_url' => '/contact',
+                    'secondary_label' => 'Partner With Us',
+                    'secondary_url' => '/partner',
                     'alignment' => 'left',
+                    'background_style' => 'light',
                 ],
             ],
             [
@@ -77,10 +78,10 @@ class PageSeeder extends Seeder
             [
                 'type' => 'cta',
                 'settings' => [
-                    'heading' => 'Interested in partnering with Ecozeen Group?',
+                    'heading' => 'Seeking high-impact synergies',
                     'subheading' => 'Reach out to discuss investment, partnership, or enterprise service opportunities.',
-                    'primary_label' => 'Get in touch',
-                    'primary_url' => '/contact',
+                    'primary_label' => 'Partner With Us',
+                    'primary_url' => '/partner',
                     'style' => 'primary',
                 ],
             ],
@@ -112,6 +113,7 @@ class PageSeeder extends Seeder
                     'heading' => 'About Ecozeen Group',
                     'subheading' => '<p>We are a diversified holding company built around long-term ownership of strong operating businesses.</p>',
                     'alignment' => 'left',
+                    'background_style' => 'light',
                 ],
             ],
             [
@@ -139,6 +141,55 @@ class PageSeeder extends Seeder
                     'subheading' => 'The operating businesses that make up Ecozeen Group.',
                     'featured_only' => false,
                     'limit' => 12,
+                ],
+            ],
+        ]);
+
+        $partner = Page::query()->updateOrCreate(
+            ['slug' => 'partner'],
+            [
+                'title' => 'Partner With Us',
+                'status' => 'published',
+                'published_at' => now(),
+                'seo_title' => 'Partner With Us — Ecozeen Group',
+                'seo_description' => 'Explore partnership, investment, and enterprise collaboration opportunities with Ecozeen Group.',
+            ]
+        );
+
+        $this->replaceSections($partner, [
+            [
+                'type' => 'hero',
+                'settings' => [
+                    'eyebrow' => 'Strategic alliances',
+                    'heading' => 'Partner With Us',
+                    'subheading' => '<p>Ecozeen Group works with institutions, operators, and enterprises that share a long-term view of building durable businesses.</p>',
+                    'primary_label' => 'Start a Conversation',
+                    'primary_url' => '/contact',
+                    'alignment' => 'left',
+                    'background_style' => 'light',
+                ],
+            ],
+            [
+                'type' => 'feature_grid',
+                'settings' => [
+                    'heading' => 'Ways to work together',
+                    'subheading' => 'Tell us how you would like to engage and we will route your enquiry to the right team.',
+                    'columns' => 3,
+                    'items' => [
+                        ['title' => 'Investment conversations', 'description' => 'Discuss long-term ownership, capital partnerships, and group-level opportunities.'],
+                        ['title' => 'Enterprise services', 'description' => 'Engage our operating companies for technology, finance, and operational delivery.'],
+                        ['title' => 'Operating partnerships', 'description' => 'Explore commercial collaborations with companies across the Ecozeen Group portfolio.'],
+                    ],
+                ],
+            ],
+            [
+                'type' => 'cta',
+                'settings' => [
+                    'heading' => 'Ready to begin?',
+                    'subheading' => 'Use the contact form and choose Business Partnership as the inquiry type.',
+                    'primary_label' => 'Contact Ecozeen Group',
+                    'primary_url' => '/contact',
+                    'style' => 'primary',
                 ],
             ],
         ]);

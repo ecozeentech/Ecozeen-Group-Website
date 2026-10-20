@@ -12,7 +12,15 @@ use Illuminate\Http\Request;
  */
 trait HandlesMediaUploads
 {
-    protected function resolveMediaId(Request $request, string $field, ?string $collection = null): ?int
+    /**
+     * Resolve a media FK from the request.
+     *
+     * - A new upload wins.
+     * - An explicit empty value (the "Remove" control) clears the FK.
+     * - When the field is omitted (upload mode with no file, or a disabled
+     *   control), the existing ID is kept so a routine save cannot wipe images.
+     */
+    protected function resolveMediaId(Request $request, string $field, ?string $collection = null, ?int $fallback = null): ?int
     {
         if ($request->hasFile("{$field}_upload")) {
             $asset = app(MediaUploadService::class)->store(
@@ -22,6 +30,10 @@ trait HandlesMediaUploads
             );
 
             return $asset->id;
+        }
+
+        if (! $request->exists($field)) {
+            return $fallback;
         }
 
         $value = $request->input($field);

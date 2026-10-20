@@ -1,13 +1,17 @@
 @props(['settings' => null, 'dark' => false])
 @php
     $settings = $settings ?? \App\Models\WebsiteSetting::current();
-    $logo = $dark ? $settings->logoDarkMedia : $settings->logoMedia;
+    $logo = $dark ? ($settings->logoDarkMedia ?: $settings->logoMedia) : $settings->logoMedia;
+    $siteName = $settings->site_name ?: 'Ecozeen Group';
+    $fallback = $dark
+        ? asset('brand/ecozeen-mark.png')
+        : asset('brand/ecozeen-group-logo.png');
+    $src = $logo?->url() ?: $fallback;
 @endphp
-<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-2 font-heading font-extrabold text-lg']) }}>
-    @if ($logo)
-        <img src="{{ $logo->url() }}" alt="{{ $settings->site_name }}" class="h-8 w-auto">
-    @else
-        <x-brand.logo-mark class="h-8 w-8 {{ $dark ? 'text-white' : 'text-brand-navy' }}" />
-        <span class="{{ $dark ? 'text-white' : 'text-ink' }}">{{ $settings->site_name ?: 'Ecozeen Group' }}</span>
-    @endif
+<span {{ $attributes->merge(['class' => 'inline-flex items-center']) }}>
+    <img
+        src="{{ $src }}"
+        alt="{{ $siteName }}"
+        class="{{ $dark ? 'h-8 w-auto brightness-0 invert' : 'h-9 w-auto sm:h-10' }}"
+    >
 </span>

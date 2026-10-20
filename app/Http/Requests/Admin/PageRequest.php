@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 
 class PageRequest extends FormRequest
 {
+    use Concerns\NormalizesOptionalUrls;
+
     public function authorize(): bool
     {
         $page = $this->route('page') ?? new Page;
@@ -15,6 +17,11 @@ class PageRequest extends FormRequest
         return $this->isMethod('POST')
             ? $this->user()->can('create', Page::class)
             : $this->user()->can('update', $page);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->blankPlaceholderUrls(['canonical_url']);
     }
 
     public function rules(): array

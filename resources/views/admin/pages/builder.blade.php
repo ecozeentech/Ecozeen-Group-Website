@@ -1,5 +1,5 @@
 <x-layouts.admin :title="'Edit — '.$page->title">
-    <x-admin.page-header :title="$page->title" description="Configure page settings and build its sections.">
+    <x-admin.page-header :title="$page->title" description="Visual page builder — configure settings and assemble sections.">
         <x-slot:actions>
             @if ($page->status === 'published')
                 <a href="{{ $page->is_homepage ? route('home') : route('pages.show', $page->slug) }}" target="_blank" class="btn-outline">View Live</a>
@@ -13,7 +13,7 @@
             {{-- Sections --}}
             <div class="card p-6">
                 <div class="flex items-center justify-between">
-                    <h2 class="font-heading text-sm font-semibold text-ink">Sections ({{ $page->sections->count() }})</h2>
+                    <h2 class="font-heading text-sm font-semibold text-ink">Block editor ({{ $page->sections->count() }})</h2>
                     <x-admin.status-badge :status="$page->status" />
                 </div>
 

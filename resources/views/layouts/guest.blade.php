@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Ecozeen Group') }} — Admin</title>
+    <link rel="icon" type="image/png" href="{{ asset('brand/ecozeen-mark.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen flex-col items-center justify-center bg-surface-canvas px-4 py-10">

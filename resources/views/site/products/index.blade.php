@@ -1,28 +1,29 @@
 <x-layouts.public seo-title="Products &amp; Platforms" seo-description="Explore the digital products and platforms built across Ecozeen Group.">
+    <x-site.page-hero
+        eyebrow="Digital platforms"
+        title="Products &amp; Platforms"
+        description="Digital products and platforms built and operated by Ecozeen Group companies."
+    >
+        @if ($categories->isNotEmpty())
+            <form method="GET" class="mt-6 flex items-center gap-3">
+                <select name="category" class="form-select max-w-xs" onchange="this.form.submit()">
+                    <option value="">All categories</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->slug }}" @selected(request('category') === $category->slug)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </form>
+        @endif
+    </x-site.page-hero>
+
     <section class="section-spacing">
         <div class="container-site">
-            <div class="max-w-2xl">
-                <h1 class="font-heading text-3xl font-bold text-ink sm:text-4xl">Products &amp; Platforms</h1>
-                <p class="mt-3 text-ink-muted">Digital products and platforms built and operated by Ecozeen Group companies.</p>
-            </div>
-
-            @if ($categories->isNotEmpty())
-                <form method="GET" class="mt-6 flex items-center gap-3">
-                    <select name="category" class="form-select max-w-xs" onchange="this.form.submit()">
-                        <option value="">All categories</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->slug }}" @selected(request('category') === $category->slug)>{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </form>
-            @endif
-
             @if ($products->isEmpty())
-                <p class="mt-10 text-ink-muted">No products are published yet. Check back soon.</p>
+                <p class="text-ink-muted">No products are published yet. Check back soon.</p>
             @else
-                <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($products as $product)
-                        <a href="{{ route('products.show', $product) }}" class="card block p-6 transition hover:shadow-level2">
+                        <a href="{{ route('products.show', $product) }}" class="card-accent block p-6">
                             @if ($product->logoMedia)
                                 <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="h-10 w-auto">
                             @endif

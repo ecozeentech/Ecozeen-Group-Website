@@ -72,7 +72,7 @@ class PageController extends Controller
 
     public function update(PageRequest $request, Page $page): RedirectResponse
     {
-        $data = $this->prepareData($request);
+        $data = $this->prepareData($request, $page);
         $data['updated_by'] = Auth::id();
 
         DB::transaction(function () use ($data, $page) {
@@ -215,12 +215,12 @@ class PageController extends Controller
         }
     }
 
-    private function prepareData(PageRequest $request): array
+    private function prepareData(PageRequest $request, ?Page $page = null): array
     {
         $data = $request->validated();
         unset($data['seo_image_media_id_upload']);
 
-        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo');
+        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo', $page?->seo_image_media_id);
         $data['is_homepage'] = $request->boolean('is_homepage');
         $data['no_index'] = $request->boolean('no_index');
 

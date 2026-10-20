@@ -24,7 +24,7 @@
             </div>
             <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($products as $product)
-                    <a href="{{ route('products.show', $product) }}" class="card block p-6 transition hover:shadow-level2">
+                    <a href="{{ route('products.show', $product) }}" class="card-accent block p-6">
                         @if ($product->logoMedia)
                             <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="h-10 w-auto">
                         @endif

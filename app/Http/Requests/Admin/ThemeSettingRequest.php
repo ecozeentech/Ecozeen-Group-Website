@@ -13,6 +13,26 @@ class ThemeSettingRequest extends FormRequest
         return $this->user()->can('theme.manage');
     }
 
+    protected function prepareForValidation(): void
+    {
+        $colors = [
+            'primary_color', 'secondary_color', 'accent_color', 'success_color',
+            'text_color', 'muted_text_color', 'background_color', 'surface_color', 'border_color',
+        ];
+
+        $merge = [];
+        foreach ($colors as $key) {
+            $value = $this->input($key);
+            if (is_string($value) && preg_match('/^[0-9A-Fa-f]{6}$/', trim($value))) {
+                $merge[$key] = '#'.trim($value);
+            }
+        }
+
+        if ($merge !== []) {
+            $this->merge($merge);
+        }
+    }
+
     /**
      * Color fields accept only strict 6-digit hex values and every
      * select-style field is restricted to ThemeSetting::allowedOptions(),

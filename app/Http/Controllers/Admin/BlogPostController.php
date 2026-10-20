@@ -60,7 +60,7 @@ class BlogPostController extends Controller
 
     public function update(BlogPostRequest $request, BlogPost $blogPost): RedirectResponse
     {
-        [$data, $tagIds] = $this->prepareData($request);
+        [$data, $tagIds] = $this->prepareData($request, $blogPost);
 
         $blogPost->update($data);
         $blogPost->tags()->sync($tagIds);
@@ -97,14 +97,14 @@ class BlogPostController extends Controller
         ]);
     }
 
-    private function prepareData(BlogPostRequest $request): array
+    private function prepareData(BlogPostRequest $request, ?BlogPost $post = null): array
     {
         $data = $request->validated();
         $tagIds = $data['tag_ids'] ?? [];
         unset($data['tag_ids'], $data['cover_media_id_upload'], $data['seo_image_media_id_upload']);
 
-        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'blog');
-        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo');
+        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'blog', $post?->cover_media_id);
+        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo', $post?->seo_image_media_id);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['no_index'] = $request->boolean('no_index');
 

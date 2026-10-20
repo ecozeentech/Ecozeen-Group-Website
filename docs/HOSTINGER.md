@@ -409,7 +409,9 @@ scheduled tasks.
 
 ## Updating the site later
 
-Whenever `main` changes:
+Whenever `main` changes (including this Stitch redesign: new logo/favicon
+under `public/brand/`, rebuilt CSS in `public/build/`, and admin save
+fixes):
 
 ```bash
 cd ~/domains/yourdomain.com/public_html
@@ -422,12 +424,24 @@ git pull origin main
 /opt/alt/php83/usr/bin/php artisan view:cache
 ```
 
-Do **not** re-run `db:seed` on a live site unless you intend to reset
-seeded content (the seeders are idempotent for natural keys, but they
-will overwrite matching pages/companies).
+Then hard-refresh the browser (Ctrl+Shift+R / Cmd+Shift+R). The hashed
+files in `public/build/` change on each frontend build, and Hostinger
+does not need Node — those files ship on `main`.
 
-If CSS/JS looks stale after a pull, do a hard refresh (Ctrl+Shift+R). The
-hashed files in `public/build/` change on each frontend build.
+Do **not** re-run `db:seed` on a live site that already has content.
+`PageSeeder` and `NavigationSeeder` replace matching pages and menus, so
+a re-seed would overwrite homepage and navigation edits made in admin.
+
+If you want the new **Partner With Us** page and Stitch nav labels on an
+existing site, add them in **Admin → Pages** and **Admin → Navigation
+Menus** instead of seeding. The uploaded wordmark and shield are already
+used as the fallback logo and favicon at `public/brand/` and
+`public/favicon.png` — no extra upload is required unless you prefer
+CMS-managed media.
+
+After this update, saving companies, products, settings, and pages in
+admin no longer wipes images or fails on empty `https://` social/website
+URL placeholders.
 
 ---
 

@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 
 class CompanyRequest extends FormRequest
 {
+    use Concerns\NormalizesOptionalUrls;
+
     public function authorize(): bool
     {
         $company = $this->route('company') ?? new Company;
@@ -15,6 +17,11 @@ class CompanyRequest extends FormRequest
         return $this->isMethod('POST')
             ? $this->user()->can('create', Company::class)
             : $this->user()->can('update', $company);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->blankPlaceholderUrls(['website_url']);
     }
 
     public function rules(): array

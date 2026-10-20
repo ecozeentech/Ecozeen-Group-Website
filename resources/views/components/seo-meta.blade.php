@@ -36,9 +36,8 @@
     <meta name="twitter:image" content="{{ $resolvedImage }}">
 @endif
 
-@if ($settings->faviconMedia)
-    <link rel="icon" href="{{ $settings->faviconMedia->url() }}">
-@endif
+<link rel="icon" type="image/png" href="{{ $settings->faviconMedia?->url() ?: asset('brand/ecozeen-mark.png') }}">
+<link rel="apple-touch-icon" href="{{ $settings->faviconMedia?->url() ?: asset('brand/ecozeen-mark.png') }}">
 
 @if (! empty($structuredData))
     <script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>

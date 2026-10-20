@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * All section settings submitted from the browser are re-validated and
@@ -109,8 +110,21 @@ class PageSectionController extends Controller
 
         foreach ($definition['fields'] as $field => $fieldType) {
             if (in_array($fieldType, ['list', 'collection'], true) && array_key_exists($field, $settings) && is_string($settings[$field])) {
-                $decoded = json_decode($settings[$field], true);
-                $settings[$field] = is_array($decoded) ? $decoded : [];
+                $raw = trim($settings[$field]);
+                if ($raw === '') {
+                    $settings[$field] = [];
+
+                    continue;
+                }
+
+                $decoded = json_decode($raw, true);
+                if (! is_array($decoded)) {
+                    throw ValidationException::withMessages([
+                        "settings.{$field}" => 'This field must be valid JSON.',
+                    ]);
+                }
+
+                $settings[$field] = $decoded;
             }
         }
 

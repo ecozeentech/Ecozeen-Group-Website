@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
+    use Concerns\NormalizesOptionalUrls;
+
     public function authorize(): bool
     {
         $product = $this->route('product') ?? new Product;
@@ -15,6 +17,11 @@ class ProductRequest extends FormRequest
         return $this->isMethod('POST')
             ? $this->user()->can('create', Product::class)
             : $this->user()->can('update', $product);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->blankPlaceholderUrls(['website_url']);
     }
 
     public function rules(): array
@@ -35,6 +42,7 @@ class ProductRequest extends FormRequest
             'website_url' => ['nullable', 'url', 'max:255'],
             'features' => ['nullable', 'array'],
             'features.*' => ['string', 'max:255'],
+            'features_raw' => ['nullable', 'string'],
             'category_ids' => ['nullable', 'array'],
             'category_ids.*' => ['integer', 'exists:product_categories,id'],
             'status' => ['required', Rule::in(['draft', 'published', 'archived'])],

@@ -10,14 +10,15 @@
         'description' => $product->short_description,
     ]"
 >
-    <section class="bg-brand-navy py-14 text-white">
-        <div class="container-site flex flex-col items-center gap-4 text-center">
+    <section class="border-b border-surface-border bg-white">
+        <div class="container-site flex flex-col items-start gap-4 py-12 sm:py-16">
+            <p class="text-eyebrow">Products &amp; platforms</p>
             @if ($product->logoMedia)
-                <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="h-14 w-auto">
+                <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="h-12 w-auto">
             @endif
-            <h1 class="font-heading text-3xl font-bold sm:text-4xl">{{ $product->name }}</h1>
+            <h1 class="font-heading text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">{{ $product->name }}</h1>
             @if ($product->tagline)
-                <p class="max-w-xl text-lg text-slate-200">{{ $product->tagline }}</p>
+                <p class="max-w-2xl text-lg text-ink-muted">{{ $product->tagline }}</p>
             @endif
             @if ($product->website_url)
                 <a href="{{ $product->website_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary mt-2">Visit {{ $product->name }} &rarr;</a>

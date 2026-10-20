@@ -16,15 +16,15 @@
     :no-index="$company->no_index"
     :structured-data="$structuredData"
 >
-    <section class="bg-brand-navy py-12 text-white">
-        <div class="container-site flex flex-col items-center gap-4 text-center">
+    <section class="border-b border-surface-border bg-white">
+        <div class="container-site flex flex-col items-start gap-4 py-12 sm:py-16">
+            <p class="text-eyebrow">{{ \Illuminate\Support\Str::headline($company->type) }}@if($company->region) &middot; {{ $company->region }}@endif</p>
             @if ($company->logoMedia)
-                <img src="{{ $company->logoMedia->url() }}" alt="{{ $company->name }}" class="h-14 w-auto">
+                <img src="{{ $company->logoMedia->url() }}" alt="{{ $company->name }}" class="h-12 w-auto">
             @endif
-            <h1 class="font-heading text-3xl font-bold sm:text-4xl">{{ $company->name }}</h1>
-            <p class="text-sm font-medium uppercase tracking-wide text-slate-300">{{ \Illuminate\Support\Str::headline($company->type) }} &middot; {{ $company->region }}</p>
+            <h1 class="font-heading text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">{{ $company->name }}</h1>
             @if ($company->short_description)
-                <p class="max-w-2xl text-slate-200">{{ $company->short_description }}</p>
+                <p class="max-w-2xl text-lg text-ink-muted">{{ $company->short_description }}</p>
             @endif
             @if ($company->website_url)
                 <a href="{{ $company->website_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary mt-2">Visit {{ $company->name }} &rarr;</a>

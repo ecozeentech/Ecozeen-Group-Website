@@ -38,7 +38,14 @@
                     @break
 
                 @default
-                    <input type="text" id="{{ $fieldId }}" name="settings[{{ $field }}]" value="{{ $value }}" class="form-input">
+                    @if ($field === 'background_style')
+                        <select id="{{ $fieldId }}" name="settings[{{ $field }}]" class="form-select">
+                            <option value="light" @selected(($value ?: 'light') === 'light')>Light (Stitch default)</option>
+                            <option value="navy" @selected(in_array($value, ['navy', 'dark', 'primary'], true))>Navy</option>
+                        </select>
+                    @else
+                        <input type="text" id="{{ $fieldId }}" name="settings[{{ $field }}]" value="{{ $value }}" class="form-input">
+                    @endif
             @endswitch
         </div>
     @endforeach

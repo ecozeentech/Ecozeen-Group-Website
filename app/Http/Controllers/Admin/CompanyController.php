@@ -66,7 +66,7 @@ class CompanyController extends Controller
 
     public function update(CompanyRequest $request, Company $company): RedirectResponse
     {
-        [$fields, $serviceIds] = $this->prepareData($request);
+        [$fields, $serviceIds] = $this->prepareData($request, $company);
 
         $company->update($fields);
         $company->services()->sync($serviceIds);
@@ -85,15 +85,15 @@ class CompanyController extends Controller
         return redirect()->route('admin.companies.index')->with('success', 'Company archived successfully.');
     }
 
-    private function prepareData(CompanyRequest $request): array
+    private function prepareData(CompanyRequest $request, ?Company $company = null): array
     {
         $data = $request->validated();
         $serviceIds = $data['service_ids'] ?? [];
         unset($data['service_ids'], $data['logo_media_id_upload'], $data['cover_media_id_upload'], $data['seo_image_media_id_upload']);
 
-        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'companies');
-        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'companies');
-        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo');
+        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'companies', $company?->logo_media_id);
+        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'companies', $company?->cover_media_id);
+        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo', $company?->seo_image_media_id);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['no_index'] = $request->boolean('no_index');
 

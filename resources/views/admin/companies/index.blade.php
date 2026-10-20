@@ -2,7 +2,7 @@
     <x-admin.page-header title="Companies & Subsidiaries" description="Manage Ecozeen Group's companies, subsidiaries, and business divisions.">
         <x-slot:actions>
             @can('companies.create')
-                <a href="{{ route('admin.companies.create') }}" class="btn-primary">+ New Company</a>
+                <a href="{{ route('admin.companies.create') }}" class="btn-secondary">+ New Company</a>
             @endcan
         </x-slot:actions>
     </x-admin.page-header>
