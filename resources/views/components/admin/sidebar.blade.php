@@ -35,8 +35,11 @@
 @endphp
 <aside class="hidden w-[260px] shrink-0 flex-col bg-brand-navy text-slate-200 lg:flex" aria-label="Admin navigation">
     <div class="flex h-16 items-center gap-2 border-b border-white/10 px-5">
-        <x-brand.logo-mark class="h-7 w-7 text-white" />
-        <span class="font-heading text-sm font-bold text-white">Ecozeen Admin</span>
+        <x-brand.logo-mark class="h-8 w-8 brightness-0 invert" />
+        <div>
+            <span class="block font-heading text-sm font-bold text-white">Ecozeen Admin</span>
+            <span class="block text-[10px] uppercase tracking-wider text-slate-400">Enterprise CMS</span>
+        </div>
     </div>
 
     <nav class="flex-1 overflow-y-auto px-3 py-4">

@@ -11,6 +11,23 @@ class WebsiteSettingRequest extends FormRequest
         return $this->user()->can('settings.manage');
     }
 
+    protected function prepareForValidation(): void
+    {
+        $links = $this->input('social_links', []);
+
+        if (is_array($links)) {
+            $cleaned = [];
+            foreach ($links as $key => $url) {
+                $url = is_string($url) ? trim($url) : '';
+                if ($url === '' || $url === 'https://' || $url === 'http://') {
+                    continue;
+                }
+                $cleaned[$key] = $url;
+            }
+            $this->merge(['social_links' => $cleaned]);
+        }
+    }
+
     public function rules(): array
     {
         return [

@@ -23,7 +23,7 @@
             </div>
             <div class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach ($companies as $company)
-                    <a href="{{ route('companies.show', $company) }}" class="card flex flex-col items-center gap-3 p-6 text-center transition hover:shadow-level2">
+                    <a href="{{ route('companies.show', $company) }}" class="card-accent flex flex-col items-center gap-3 p-6 text-center">
                         @if ($company->logoMedia)
                             <img src="{{ $company->logoMedia->url() }}" alt="{{ $company->name }}" class="h-12 w-auto">
                         @else

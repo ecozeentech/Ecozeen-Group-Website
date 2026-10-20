@@ -1,29 +1,38 @@
 @props(['settings'])
 @php
     $mainMenu = \App\Services\NavigationService::menu('main');
+    $partnerPage = \App\Models\Page::query()
+        ->where('slug', 'partner')
+        ->where('status', 'published')
+        ->first();
+    $partnerUrl = $partnerPage ? url('/partner') : route('contact');
 @endphp
 <header
     x-data="{ mobileOpen: false }"
-    class="sticky top-0 z-40 border-b border-surface-border/80 bg-white/85 backdrop-blur-md"
+    class="sticky top-0 z-50 border-b border-surface-border bg-white/85 shadow-sm backdrop-blur-md"
 >
     <div class="container-site flex h-16 items-center justify-between lg:h-20">
         <a href="{{ route('home') }}" class="shrink-0">
-            <x-brand.logo :settings="$settings" />
+            <x-brand.logo :settings="$settings" class="[&_img]:h-9 [&_img]:sm:h-10" />
         </a>
 
-        <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+        <nav class="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
             @if ($mainMenu)
                 @foreach ($mainMenu->items as $item)
+                    @php
+                        $path = trim($item->resolvedUrl(), '/');
+                        $active = $path !== '' && (request()->is($path) || request()->is($path.'/*'));
+                    @endphp
                     <div class="relative" x-data="{ open: false }" @mouseleave="open = false">
                         <a
                             href="{{ $item->resolvedUrl() }}"
                             @if ($item->open_in_new_tab) target="_blank" rel="noopener" @endif
                             @if ($item->children->isNotEmpty()) @mouseenter="open = true" @click="open = !open" @endif
-                            class="flex items-center gap-1 rounded-token px-3 py-2 text-sm font-medium text-ink hover:text-brand-blue {{ request()->is(trim($item->resolvedUrl(), '/')) || (trim($item->resolvedUrl(),'/') !== '' && request()->is(trim($item->resolvedUrl(), '/').'/*')) ? 'text-brand-blue' : '' }}"
+                            class="border-b-2 py-1 text-sm font-semibold transition-colors {{ $active ? 'border-brand-blue text-brand-blue' : 'border-transparent text-slate-600 hover:text-ink' }}"
                         >
                             {{ $item->label }}
                             @if ($item->children->isNotEmpty())
-                                <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" /></svg>
+                                <svg class="ml-0.5 inline h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" /></svg>
                             @endif
                         </a>
                         @if ($item->children->isNotEmpty())
@@ -31,7 +40,7 @@
                                 x-show="open"
                                 x-transition
                                 x-cloak
-                                class="absolute left-0 top-full z-50 mt-1 w-56 rounded-token border border-surface-border bg-white py-2 shadow-level2"
+                                class="absolute left-0 top-full z-50 mt-2 w-56 rounded-lg border border-surface-border bg-white py-2 shadow-level2"
                             >
                                 @foreach ($item->children as $child)
                                     <a href="{{ $child->resolvedUrl() }}" class="block px-4 py-2 text-sm text-ink hover:bg-slate-50 hover:text-brand-blue">
@@ -46,7 +55,11 @@
         </nav>
 
         <div class="hidden items-center gap-3 lg:flex">
-            <a href="{{ route('contact') }}" class="btn-primary">Partner With Us</a>
+            <a href="{{ route('contact') }}" class="btn-outline rounded-xl px-4 py-2">Contact</a>
+            <a href="{{ $partnerUrl }}" class="btn-secondary rounded-xl">
+                Partner With Us
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.69l-3.22-3.22a.75.75 0 111.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.22-3.22H3.75A.75.75 0 013 10z" clip-rule="evenodd" /></svg>
+            </a>
         </div>
 
         <button
@@ -82,7 +95,8 @@
                     @endforeach
                 @endforeach
             @endif
-            <a href="{{ route('contact') }}" class="btn-primary mt-2 w-full">Partner With Us</a>
+            <a href="{{ route('contact') }}" class="btn-outline mt-2 w-full">Contact</a>
+            <a href="{{ $partnerUrl }}" class="btn-secondary w-full">Partner With Us</a>
         </nav>
     </div>
 </header>

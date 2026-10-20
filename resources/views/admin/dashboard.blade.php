@@ -1,4 +1,15 @@
-<x-layouts.admin title="Dashboard" subtitle="Real-time overview of your Ecozeen Group website">
+<x-layouts.admin title="Dashboard" subtitle="Live content management and publishing hub">
+    <div class="mb-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+        <div>
+            <p class="text-eyebrow">Analytics overview</p>
+            <h2 class="mt-2 font-heading text-2xl font-bold text-ink">Welcome back, {{ auth()->user()->name }}</h2>
+            <p class="mt-1 text-sm text-ink-muted">Real-time overview of the Ecozeen Group website and CMS.</p>
+        </div>
+        @can('pages.create')
+            <a href="{{ route('admin.pages.create') }}" class="btn-secondary">+ New Page</a>
+        @endcan
+    </div>
+
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         @foreach ([
             ['label' => 'Companies', 'value' => $stats['companies'], 'route' => 'admin.companies.index'],
@@ -13,8 +24,8 @@
             ['label' => 'New Inquiries', 'value' => $stats['new_inquiries'], 'route' => 'admin.inquiries.index'],
             ['label' => 'Newsletter Subscribers', 'value' => $stats['newsletter_subscribers'], 'route' => 'admin.newsletter.index'],
         ] as $card)
-            <a href="{{ route($card['route']) }}" class="card p-5 transition hover:shadow-level2">
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">{{ $card['label'] }}</p>
+            <a href="{{ route($card['route']) }}" class="card-accent p-5">
+                <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">{{ $card['label'] }}</p>
                 <p class="mt-2 font-heading text-2xl font-bold text-ink">{{ $card['value'] }}</p>
             </a>
         @endforeach
@@ -22,7 +33,10 @@
 
     <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div class="card p-6">
-            <h2 class="font-heading text-sm font-semibold text-ink">Recent Inquiries</h2>
+            <div class="flex items-center justify-between">
+                <h2 class="font-heading text-sm font-semibold text-ink">Recent Inquiries</h2>
+                <a href="{{ route('admin.inquiries.index') }}" class="text-xs font-semibold text-brand-blue hover:underline">View all</a>
+            </div>
             @if ($recentInquiries->isEmpty())
                 <p class="mt-3 text-sm text-ink-muted">No inquiries yet.</p>
             @else
@@ -38,7 +52,12 @@
         </div>
 
         <div class="card p-6">
-            <h2 class="font-heading text-sm font-semibold text-ink">Recent Activity</h2>
+            <div class="flex items-center justify-between">
+                <h2 class="font-heading text-sm font-semibold text-ink">Recent Activity</h2>
+                @can('activity.view')
+                    <a href="{{ route('admin.activity.index') }}" class="text-xs font-semibold text-brand-blue hover:underline">Audit log</a>
+                @endcan
+            </div>
             @if ($recentActivity->isEmpty())
                 <p class="mt-3 text-sm text-ink-muted">No activity recorded yet.</p>
             @else

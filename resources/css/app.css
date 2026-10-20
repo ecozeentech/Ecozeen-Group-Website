@@ -17,8 +17,8 @@
         --color-primary: #0F172A;
         --color-secondary: #2563EB;
         --color-accent: #38BDF8;
-        --color-success: #15803D;
-        --color-text: #111827;
+        --color-success: #10B981;
+        --color-text: #0F172A;
         --color-text-muted: #64748B;
         --color-background: #F8FAFC;
         --color-surface: #FFFFFF;
@@ -89,6 +89,32 @@
 
     .card {
         @apply rounded-token border border-surface-border bg-surface shadow-level1;
+    }
+
+    .card-hover {
+        @apply card transition duration-150 hover:border-slate-300 hover:shadow-level2;
+    }
+
+    .card-accent {
+        @apply card-hover border-t-2 border-t-brand-blue;
+    }
+
+    .card-accent-emerald {
+        @apply card-hover border-t-2 border-t-brand-emerald;
+    }
+
+    .text-eyebrow {
+        @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-brand-emerald;
+    }
+
+    .display-xl {
+        @apply font-heading text-4xl font-extrabold tracking-tight text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px];
+    }
+
+    .form-public .form-input,
+    .form-public .form-select,
+    .form-public .form-textarea {
+        min-height: 3rem;
     }
 
     .badge {

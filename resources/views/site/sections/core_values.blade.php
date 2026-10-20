@@ -9,7 +9,7 @@
             @endif
             <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($items as $item)
-                    <div class="card p-6">
+                    <div class="card-accent p-6">
                         <h3 class="font-heading text-base font-semibold text-ink">{{ $item['title'] ?? '' }}</h3>
                         <p class="mt-2 text-sm text-ink-muted">{{ $item['description'] ?? '' }}</p>
                     </div>

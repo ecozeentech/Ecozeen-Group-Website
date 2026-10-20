@@ -55,7 +55,7 @@ class ServiceController extends Controller
 
     public function update(ServiceRequest $request, Service $service): RedirectResponse
     {
-        [$fields, $companyIds] = $this->prepareData($request);
+        [$fields, $companyIds] = $this->prepareData($request, $service);
         $service->update($fields);
         $service->companies()->sync($companyIds);
 
@@ -81,14 +81,14 @@ class ServiceController extends Controller
         ]);
     }
 
-    private function prepareData(ServiceRequest $request): array
+    private function prepareData(ServiceRequest $request, ?Service $service = null): array
     {
         $data = $request->validated();
         $companyIds = $data['company_ids'] ?? [];
         unset($data['company_ids'], $data['cover_media_id_upload'], $data['seo_image_media_id_upload']);
 
-        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'services');
-        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo');
+        $data['cover_media_id'] = $this->resolveMediaId($request, 'cover_media_id', 'services', $service?->cover_media_id);
+        $data['seo_image_media_id'] = $this->resolveMediaId($request, 'seo_image_media_id', 'seo', $service?->seo_image_media_id);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['no_index'] = $request->boolean('no_index');
 

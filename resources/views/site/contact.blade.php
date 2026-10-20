@@ -2,23 +2,36 @@
     $settings = \App\Models\WebsiteSetting::current();
 @endphp
 <x-layouts.public seo-title="Contact" seo-description="Get in touch with Ecozeen Group.">
+    <x-site.page-hero
+        eyebrow="Official communications"
+        title="Contact &amp; Institutional Inquiries"
+        description="Reach the relevant Ecozeen Group team. We respond to every verified enquiry."
+    />
+
     <section class="section-spacing">
         <div class="container-site grid grid-cols-1 gap-10 lg:grid-cols-3">
-            <div>
-                <h1 class="font-heading text-3xl font-bold text-ink">Contact Us</h1>
-                <p class="mt-3 text-ink-muted">Reach out to the relevant Ecozeen Group team. We respond to every verified enquiry.</p>
-
-                <div class="mt-8 space-y-4 text-sm text-ink">
-                    @if ($settings->contact_email)
-                        <p><span class="font-semibold">Email:</span> <a href="mailto:{{ $settings->contact_email }}" class="text-brand-blue hover:underline">{{ $settings->contact_email }}</a></p>
-                    @endif
-                    @if ($settings->contact_phone)
-                        <p><span class="font-semibold">Phone:</span> {{ $settings->contact_phone }}</p>
-                    @endif
-                    @if ($settings->address_primary)
-                        <p><span class="font-semibold">Address:</span> {{ $settings->address_primary }}</p>
-                    @endif
-                </div>
+            <div class="space-y-4 text-sm text-ink">
+                @if ($settings->contact_email)
+                    <div class="card p-5">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">Email</p>
+                        <a href="mailto:{{ $settings->contact_email }}" class="mt-1 block font-medium text-brand-blue hover:underline">{{ $settings->contact_email }}</a>
+                    </div>
+                @endif
+                @if ($settings->contact_phone)
+                    <div class="card p-5">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">Phone</p>
+                        <p class="mt-1 font-medium">{{ $settings->contact_phone }}</p>
+                    </div>
+                @endif
+                @if ($settings->address_primary)
+                    <div class="card p-5">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">Address</p>
+                        <p class="mt-1 font-medium">{{ $settings->address_primary }}</p>
+                    </div>
+                @endif
+                @if (! $settings->contact_email && ! $settings->contact_phone && ! $settings->address_primary)
+                    <p class="text-ink-muted">Use the form to send a message. Contact details can be added by an administrator in Website Settings.</p>
+                @endif
             </div>
 
             <div class="lg:col-span-2">
@@ -27,7 +40,7 @@
                         <p class="mb-4 rounded-token border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{{ session('status') }}</p>
                     @endif
 
-                    <form method="POST" action="{{ route('contact.store') }}" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <form method="POST" action="{{ route('contact.store') }}" class="form-public grid grid-cols-1 gap-4 sm:grid-cols-2">
                         @csrf
                         <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
 

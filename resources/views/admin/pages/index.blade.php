@@ -2,7 +2,7 @@
     <x-admin.page-header title="Pages" description="Build and manage every page on the public website.">
         <x-slot:actions>
             @can('pages.create')
-                <a href="{{ route('admin.pages.create') }}" class="btn-primary">+ New Page</a>
+                <a href="{{ route('admin.pages.create') }}" class="btn-secondary">+ New Page</a>
             @endcan
         </x-slot:actions>
     </x-admin.page-header>
@@ -19,7 +19,7 @@
     @if ($pages->isEmpty())
         <x-admin.empty-state title="No pages yet" description="Create your first page to start building the public website.">
             <x-slot:action>
-                <a href="{{ route('admin.pages.create') }}" class="btn-primary">+ New Page</a>
+                <a href="{{ route('admin.pages.create') }}" class="btn-secondary">+ New Page</a>
             </x-slot:action>
         </x-admin.empty-state>
     @else

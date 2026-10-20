@@ -34,10 +34,10 @@ class WebsiteSettingController extends Controller
             $data['favicon_media_id_upload'], $data['default_og_image_media_id_upload']
         );
 
-        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'branding');
-        $data['logo_dark_media_id'] = $this->resolveMediaId($request, 'logo_dark_media_id', 'branding');
-        $data['favicon_media_id'] = $this->resolveMediaId($request, 'favicon_media_id', 'branding');
-        $data['default_og_image_media_id'] = $this->resolveMediaId($request, 'default_og_image_media_id', 'branding');
+        $data['logo_media_id'] = $this->resolveMediaId($request, 'logo_media_id', 'branding', $settings->logo_media_id);
+        $data['logo_dark_media_id'] = $this->resolveMediaId($request, 'logo_dark_media_id', 'branding', $settings->logo_dark_media_id);
+        $data['favicon_media_id'] = $this->resolveMediaId($request, 'favicon_media_id', 'branding', $settings->favicon_media_id);
+        $data['default_og_image_media_id'] = $this->resolveMediaId($request, 'default_og_image_media_id', 'branding', $settings->default_og_image_media_id);
         $data['social_links'] = array_filter($data['social_links'] ?? []);
         $data['announcement_enabled'] = $request->boolean('announcement_enabled');
         $data['maintenance_mode'] = $request->boolean('maintenance_mode');
