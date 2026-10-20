@@ -49,7 +49,12 @@ class ThemeSetting extends Model
     public static function current(): self
     {
         $attributes = Cache::rememberForever('theme_settings.current', function () {
-            return self::query()->firstOrCreate(['id' => 1])->getAttributes();
+            // firstOrCreate() only reflects the attributes explicitly set on
+            // the in-memory model; it does not re-fetch columns populated by
+            // database-level defaults (e.g. the brand color palette) on a
+            // freshly created row. fresh() reloads the row so those defaults
+            // are captured and cached correctly.
+            return self::query()->firstOrCreate(['id' => 1])->fresh()->getAttributes();
         });
 
         return (new self)->newFromBuilder($attributes);
