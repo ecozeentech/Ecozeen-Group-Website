@@ -20,6 +20,7 @@ class MediaAssetFactory extends Factory
             'path' => 'media/'.$filename,
             'filename' => $filename,
             'original_filename' => fake()->word().'.jpg',
+            'extension' => 'jpg',
             'mime_type' => 'image/jpeg',
             'size' => fake()->numberBetween(1000, 500000),
             'width' => 800,
