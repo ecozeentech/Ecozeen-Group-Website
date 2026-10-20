@@ -118,7 +118,12 @@
     .form-input,
     .form-textarea,
     .form-select {
-        @apply block w-full rounded-token border-slate-300 text-sm text-ink shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue/20;
+        /* Opacity modifiers (e.g. ring-brand-blue/20) cannot be used inside
+           @apply, since the custom brand colors reference CSS variables
+           rather than literal color values that Tailwind can derive an
+           alpha channel from. focus:ring-opacity-20 achieves the same
+           translucent focus ring without that restriction. */
+        @apply block w-full rounded-token border-slate-300 text-sm text-ink shadow-sm focus:border-brand-blue focus:ring focus:ring-brand-blue focus:ring-opacity-20;
     }
 
     .form-hint {
