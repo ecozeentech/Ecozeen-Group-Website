@@ -130,6 +130,9 @@ vendor/bin/pint          # auto-fix
 
 ## Documentation
 
-- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — production deployment,
-  environment reference, backup & recovery, and the first-admin bootstrap
-  procedure.
+- [`docs/HOSTINGER.md`](docs/HOSTINGER.md) — **step-by-step Hostinger
+  Business shared hosting setup** (PHP 8.3, MySQL, Git, `.env`, migrate,
+  first admin, SSL, cron).
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — VPS / generic production
+  deployment, environment reference, backup & recovery, and the
+  first-admin bootstrap procedure.
