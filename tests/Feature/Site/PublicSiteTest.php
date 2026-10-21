@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\Service;
+use App\Models\WebsiteSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -154,5 +155,18 @@ class PublicSiteTest extends TestCase
     {
         $this->get('/sitemap.xml')->assertOk();
         $this->get('/robots.txt')->assertOk();
+    }
+
+    public function test_the_homepage_renders_the_copyright_line_once(): void
+    {
+        WebsiteSetting::current()->update([
+            'site_name' => 'Ecozeen Group',
+            'footer_legal_text' => '© 2026 Ecozeen Group. All rights reserved.',
+        ]);
+
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertSame(1, substr_count($html, 'All rights reserved'));
+        $this->assertSame(1, substr_count($html, '© 2026 Ecozeen Group. All rights reserved.'));
     }
 }

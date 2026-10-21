@@ -17,6 +17,8 @@
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
+/public/media/*
+!/public/media/.gitkeep
 /storage/*.key
 /storage/pail
 /vendor

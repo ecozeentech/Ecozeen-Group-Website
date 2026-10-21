@@ -1,5 +1,5 @@
 <x-layouts.admin :title="'Visual Editor — '.$page->title">
-    <x-admin.page-header :title="$page->title" description="Canvas on the left, page inspector on the right. Add sections, configure fields, and publish when ready.">
+    <x-admin.page-header :title="$page->title" description="Each block on this page can be edited or deleted independently. Add a section, change its fields, then save.">
         <x-slot:actions>
             @if ($page->status === 'published')
                 <a href="{{ $page->is_homepage ? route('home') : route('pages.show', $page->slug) }}" target="_blank" class="btn-outline">View Live</a>
@@ -15,31 +15,43 @@
                 <div class="flex items-center justify-between border-b border-surface-border bg-slate-50 px-6 py-4">
                     <div>
                         <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Page canvas</p>
-                        <h2 class="font-heading text-sm font-semibold text-ink">Block editor ({{ $page->sections->count() }})</h2>
+                        <h2 class="font-heading text-sm font-semibold text-ink">Sections ({{ $page->sections->count() }})</h2>
                     </div>
                     <x-admin.status-badge :status="$page->status" />
                 </div>
                 <div class="p-6">
+                    <p class="rounded-token border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-800">
+                        Click <strong>Edit</strong> to change a section. <strong>Delete</strong> removes it from this page only. Reusable sections are edited once and update everywhere they are placed.
+                    </p>
 
                 @if ($page->sections->isEmpty())
                     <p class="mt-4 text-sm text-ink-muted">No sections yet. Add your first section below.</p>
                 @else
-                    <div class="mt-4 space-y-3" x-data="{ open: null }">
+                    @php($openSection = session('open_section') ?? $page->sections->first()?->id)
+                    <div class="mt-4 space-y-3" x-data="{ open: {{ $openSection ? (int) $openSection : 'null' }} }">
                         @php($orderedIds = $page->sections->pluck('id')->values())
                         @foreach ($page->sections as $section)
                             @php($currentIndex = $orderedIds->search($section->id))
-                            <div class="rounded-token border border-surface-border">
-                                <div class="flex items-center justify-between gap-2 p-4">
-                                    <div class="flex items-center gap-3">
-                                        <span class="badge badge-neutral">{{ \App\Support\PageBuilder\SectionTypeRegistry::label($section->type) }}</span>
-                                        @if ($section->globalSection)
-                                            <span class="text-xs text-ink-muted">Reusable: {{ $section->globalSection->name }}</span>
+                            @php($preview = $section->settings['heading'] ?? $section->settings['title'] ?? $section->settings['eyebrow'] ?? null)
+                            <div id="section-{{ $section->id }}" class="rounded-token border border-surface-border">
+                                <div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <button type="button" class="min-w-0 flex-1 text-left" @click="open = open === {{ $section->id }} ? null : {{ $section->id }}">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <span class="badge badge-neutral">{{ \App\Support\PageBuilder\SectionTypeRegistry::label($section->type) }}</span>
+                                            @if ($section->globalSection)
+                                                <span class="text-xs text-ink-muted">Reusable: {{ $section->globalSection->name }}</span>
+                                            @endif
+                                            @unless ($section->is_visible)
+                                                <span class="badge badge-neutral">Hidden</span>
+                                            @endunless
+                                        </div>
+                                        @if ($preview)
+                                            <p class="mt-1 truncate text-sm font-medium text-ink">{{ $preview }}</p>
+                                        @else
+                                            <p class="mt-1 text-xs text-ink-muted">Untitled {{ \Illuminate\Support\Str::lower(\App\Support\PageBuilder\SectionTypeRegistry::label($section->type)) }} block</p>
                                         @endif
-                                        @unless ($section->is_visible)
-                                            <span class="badge badge-neutral">Hidden</span>
-                                        @endunless
-                                    </div>
-                                    <div class="flex items-center gap-2">
+                                    </button>
+                                    <div class="flex flex-wrap items-center gap-2">
                                         @if ($currentIndex > 0)
                                             @php($swapped = $orderedIds->toArray())
                                             @php([$swapped[$currentIndex - 1], $swapped[$currentIndex]] = [$swapped[$currentIndex], $swapped[$currentIndex - 1]])
@@ -62,10 +74,10 @@
                                                 <button type="submit" class="btn-outline" aria-label="Move section down">&darr;</button>
                                             </form>
                                         @endif
-                                        <button type="button" class="btn-outline" @click="open = open === {{ $section->id }} ? null : {{ $section->id }}">
-                                            <span x-text="open === {{ $section->id }} ? 'Close' : 'Configure'"></span>
+                                        <button type="button" class="btn-primary" @click="open = open === {{ $section->id }} ? null : {{ $section->id }}">
+                                            <span x-text="open === {{ $section->id }} ? 'Close' : 'Edit'"></span>
                                         </button>
-                                        <x-admin.delete-button :action="route('admin.pages.sections.destroy', [$page, $section])" label="Remove" confirm="Remove this section from the page?" />
+                                        <x-admin.delete-button :action="route('admin.pages.sections.destroy', [$page, $section])" label="Delete" confirm="Delete this section from the page? This cannot be undone." />
                                     </div>
                                 </div>
 
@@ -95,7 +107,7 @@
                                                 <label class="inline-flex items-center gap-2 text-sm">
                                                     <input type="checkbox" name="visible_mobile" value="1" @checked($section->visible_mobile) class="rounded border-slate-300 text-brand-blue"> Show on mobile
                                                 </label>
-                                                <button type="submit" class="btn-primary ml-auto">Save Section</button>
+                                                <button type="submit" class="btn-primary ml-auto">Save section</button>
                                             </div>
                                         </form>
                                     @endif
@@ -106,7 +118,7 @@
                 @endif
 
                 <div class="mt-6 border-t border-surface-border pt-4">
-                    <h3 class="font-heading text-sm font-semibold text-ink">Add a Section</h3>
+                    <h3 class="font-heading text-sm font-semibold text-ink">Add a section</h3>
                     <form method="POST" action="{{ route('admin.pages.sections.store', $page) }}" class="mt-3 flex flex-col gap-3 sm:flex-row">
                         @csrf
                         <select name="type" required class="form-select flex-1">
@@ -114,7 +126,7 @@
                                 <option value="{{ $typeKey }}">{{ $definition['label'] }}</option>
                             @endforeach
                         </select>
-                        <button type="submit" class="btn-primary whitespace-nowrap">+ Add Section</button>
+                        <button type="submit" class="btn-primary whitespace-nowrap">+ Add section</button>
                     </form>
 
                     @if ($globalSections->isNotEmpty())
@@ -127,7 +139,7 @@
                                 @endforeach
                             </select>
                             <input type="hidden" name="type" value="">
-                            <button type="submit" class="btn-outline whitespace-nowrap">+ Insert Reusable</button>
+                            <button type="submit" class="btn-outline whitespace-nowrap">+ Insert reusable</button>
                         </form>
                     @endif
                 </div>
@@ -136,7 +148,7 @@
 
             {{-- Revision history --}}
             <div class="card p-6">
-                <h2 class="font-heading text-sm font-semibold text-ink">Revision History</h2>
+                <h2 class="font-heading text-sm font-semibold text-ink">Revision history</h2>
                 @if ($page->revisions->isEmpty())
                     <p class="mt-3 text-sm text-ink-muted">No saved revisions yet. A snapshot is saved automatically each time this page is updated.</p>
                 @else
@@ -184,7 +196,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full">Save Page Settings</button>
+                    <button type="submit" class="btn-primary w-full">Save page settings</button>
                 </form>
                 </div>
             </div>

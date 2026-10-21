@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\WebsiteSettingRequest;
+use App\Models\NavigationMenu;
 use App\Models\WebsiteSetting;
 use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,11 @@ class WebsiteSettingController extends Controller
     {
         $this->authorize('settings.manage');
 
-        return view('admin.settings.website', ['settings' => WebsiteSetting::current()]);
+        return view('admin.settings.website', [
+            'settings' => WebsiteSetting::current(),
+            'mainMenu' => NavigationMenu::query()->where('location', 'main')->first(),
+            'footerMenu' => NavigationMenu::query()->where('location', 'footer')->first(),
+        ]);
     }
 
     public function update(WebsiteSettingRequest $request): RedirectResponse

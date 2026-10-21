@@ -7,5 +7,7 @@
     RewriteRule ^(\.env|composer\.(json|lock)|artisan|phpunit\.xml|package(-lock)?\.json) - [F,L]
     RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor|docs|node_modules)/ - [F,L]
 
+    # Public media lives in public/media (not storage/) so images are not
+    # blocked by the rule above. Everything else is forwarded to /public.
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>

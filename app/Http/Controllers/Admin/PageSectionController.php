@@ -43,7 +43,11 @@ class PageSectionController extends Controller
 
         ActivityLogger::log('created', $page, "Added a {$section->type} section to \"{$page->title}\"");
 
-        return redirect()->route('admin.pages.edit', $page)->with('success', 'Section added. Configure it below.');
+        return redirect()
+            ->route('admin.pages.edit', $page)
+            ->with('success', 'Section added. Edit it below.')
+            ->with('open_section', $section->id)
+            ->withFragment('section-'.$section->id);
     }
 
     public function update(Request $request, Page $page, PageSection $section): RedirectResponse
@@ -75,7 +79,11 @@ class PageSectionController extends Controller
 
         ActivityLogger::log('updated', $page, "Updated a {$section->type} section on \"{$page->title}\"");
 
-        return redirect()->route('admin.pages.edit', $page)->with('success', 'Section updated.');
+        return redirect()
+            ->route('admin.pages.edit', $page)
+            ->with('success', 'Section updated.')
+            ->with('open_section', $section->id)
+            ->withFragment('section-'.$section->id);
     }
 
     public function destroy(Page $page, PageSection $section): RedirectResponse
@@ -86,7 +94,7 @@ class PageSectionController extends Controller
         $section->delete();
         ActivityLogger::log('deleted', $page, "Removed a {$section->type} section from \"{$page->title}\"");
 
-        return redirect()->route('admin.pages.edit', $page)->with('success', 'Section removed.');
+        return redirect()->route('admin.pages.edit', $page)->with('success', 'Section deleted.');
     }
 
     public function reorder(Request $request, Page $page): RedirectResponse

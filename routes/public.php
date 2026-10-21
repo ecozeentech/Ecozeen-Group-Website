@@ -9,11 +9,16 @@ use App\Http\Controllers\Site\NewsletterController;
 use App\Http\Controllers\Site\PageController;
 use App\Http\Controllers\Site\PortfolioController;
 use App\Http\Controllers\Site\ProductController;
+use App\Http\Controllers\Site\PublicMediaController;
 use App\Http\Controllers\Site\SeoController;
 use App\Http\Controllers\Site\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/media/{path}', PublicMediaController::class)
+    ->where('path', '.*')
+    ->name('media.show');
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

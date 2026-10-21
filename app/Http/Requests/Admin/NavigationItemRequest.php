@@ -11,6 +11,20 @@ class NavigationItemRequest extends FormRequest
         return $this->user()->can('navigation.manage');
     }
 
+    protected function prepareForValidation(): void
+    {
+        $nullable = [];
+        foreach (['parent_id', 'page_id', 'sort_order'] as $field) {
+            if ($this->input($field) === '') {
+                $nullable[$field] = null;
+            }
+        }
+
+        if ($nullable !== []) {
+            $this->merge($nullable);
+        }
+    }
+
     public function rules(): array
     {
         return [

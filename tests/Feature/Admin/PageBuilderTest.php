@@ -37,7 +37,11 @@ class PageBuilderTest extends TestCase
         $this->assertNotNull($page);
         $response->assertRedirect("/admin/pages/{$page->id}/edit");
 
-        $this->actingAs($this->admin)->get("/admin/pages/{$page->id}/edit")->assertOk();
+        $this->actingAs($this->admin)
+            ->get("/admin/pages/{$page->id}/edit")
+            ->assertOk()
+            ->assertSee('Edit')
+            ->assertSee('Delete');
     }
 
     public function test_sections_can_be_added_configured_and_removed(): void

@@ -81,7 +81,7 @@
                     <div class="space-y-4 py-6">
                         <div class="relative h-48 overflow-hidden rounded-lg border border-surface-border bg-slate-100">
                             @if ($heroImage)
-                                <img src="{{ $heroImage->url() }}" alt="{{ $heroImage->alt_text ?: 'Ecozeen Group headquarters' }}" class="h-full w-full object-cover">
+                                <img src="{{ $heroImage->url() }}" alt="{{ $heroImage->alt_text ?: 'Ecozeen Group headquarters' }}" class="h-full w-full object-cover" loading="eager" decoding="async">
                             @else
                                 <div class="h-full w-full bg-[linear-gradient(160deg,#0F172A_0%,#1e3a8a_45%,#38BDF8_100%)]"></div>
                             @endif
@@ -202,7 +202,7 @@
                                     </span>
                                 </div>
                                 @if ($company->logoMedia)
-                                    <img src="{{ $company->logoMedia->url() }}" alt="{{ $company->name }}" class="mb-3 h-10 w-auto">
+                                    <img src="{{ $company->logoMedia->url() }}" alt="{{ $company->name }}" class="mb-3 h-10 w-auto" loading="lazy" decoding="async">
                                 @endif
                                 <h3 class="font-heading text-xl font-semibold text-ink">
                                     <a href="{{ route('companies.show', $company) }}" class="hover:text-brand-blue">{{ $company->name }}</a>
@@ -312,10 +312,10 @@
                             <div class="lg:col-span-6">
                                 <div class="overflow-hidden rounded-xl border border-surface-border bg-white shadow-level2">
                                     @if ($product->screenshotMedia)
-                                        <img src="{{ $product->screenshotMedia->url() }}" alt="{{ $product->name }}" class="h-80 w-full object-cover">
+                                        <img src="{{ $product->screenshotMedia->url() }}" alt="{{ $product->name }}" class="h-80 w-full object-cover" loading="lazy" decoding="async">
                                     @elseif ($product->logoMedia)
                                         <div class="flex h-80 items-center justify-center bg-slate-50">
-                                            <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="max-h-24 w-auto">
+                                            <img src="{{ $product->logoMedia->url() }}" alt="{{ $product->name }}" class="max-h-24 w-auto" loading="lazy" decoding="async">
                                         </div>
                                     @else
                                         <div class="flex h-80 items-center justify-center bg-[linear-gradient(135deg,#0F172A,#2563EB)] p-8 text-center text-white">
@@ -388,7 +388,7 @@
                         <a href="{{ route('blog.show', $post) }}" class="group flex flex-col overflow-hidden rounded-xl border border-surface-border bg-slate-50 transition hover:shadow-level2">
                             <div class="relative h-48 overflow-hidden bg-slate-200">
                                 @if ($post->coverMedia)
-                                    <img src="{{ $post->coverMedia->url() }}" alt="{{ $post->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                                    <img src="{{ $post->coverMedia->url() }}" alt="{{ $post->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy" decoding="async">
                                 @else
                                     <div class="h-full w-full bg-[linear-gradient(135deg,#0F172A,#2563EB)]"></div>
                                 @endif

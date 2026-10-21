@@ -84,4 +84,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('roles', RoleController::class)->except(['show']);
 
     Route::get('activity', [ActivityLogController::class, 'index'])->name('activity.index');
+    Route::delete('activity/clear', [ActivityLogController::class, 'clear'])->name('activity.clear');
+    Route::delete('activity/{activity}', [ActivityLogController::class, 'destroy'])->name('activity.destroy');
 });

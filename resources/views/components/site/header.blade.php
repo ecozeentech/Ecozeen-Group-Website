@@ -5,30 +5,34 @@
         ->where('slug', 'partner')
         ->where('status', 'published')
         ->first();
-    $partnerUrl = $partnerPage ? url('/partner') : route('contact');
+    $defaultPartnerUrl = $partnerPage ? url('/partner') : route('contact');
+    $ctaLabel = $settings->header_cta_label ?: 'Partner With Us';
+    $ctaUrl = $settings->header_cta_url ?: $defaultPartnerUrl;
+    $secondaryLabel = $settings->header_secondary_label ?: 'Contact';
+    $secondaryUrl = $settings->header_secondary_url ?: route('contact');
 @endphp
 <header
     x-data="{ mobileOpen: false }"
     class="sticky top-0 z-50 border-b border-surface-border/80 bg-white/90 shadow-sm backdrop-blur-md"
 >
-    <div class="container-site flex h-20 items-center justify-between">
+    <div class="container-site flex h-20 items-center justify-between gap-4">
         <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-3">
             <x-brand.logo :settings="$settings" />
         </a>
 
-        <nav class="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
+        <nav class="hidden items-center gap-7 xl:gap-8 lg:flex" aria-label="Primary navigation">
             @if ($mainMenu)
                 @foreach ($mainMenu->items as $item)
                     @php
-                        $path = trim($item->resolvedUrl(), '/');
+                        $path = trim(parse_url($item->resolvedUrl(), PHP_URL_PATH) ?: $item->resolvedUrl(), '/');
                         $active = $path !== '' && (request()->is($path) || request()->is($path.'/*'));
                     @endphp
                     <div class="relative" x-data="{ open: false }" @mouseleave="open = false">
                         <a
                             href="{{ $item->resolvedUrl() }}"
                             @if ($item->open_in_new_tab) target="_blank" rel="noopener" @endif
-                            @if ($item->children->isNotEmpty()) @mouseenter="open = true" @click="open = !open" @endif
-                            class="border-b-2 py-1 text-sm font-semibold transition-colors {{ $active ? 'border-brand-blue text-brand-blue' : 'border-transparent text-slate-600 hover:text-ink' }}"
+                            @if ($item->children->isNotEmpty()) @mouseenter="open = true" @click.prevent="open = !open" @endif
+                            class="inline-flex items-center gap-0.5 border-b-2 py-1 text-sm font-semibold transition-colors {{ $active ? 'border-brand-blue text-brand-blue' : 'border-transparent text-slate-600 hover:text-ink' }}"
                         >
                             {{ $item->label }}
                             @if ($item->children->isNotEmpty())
@@ -55,9 +59,9 @@
         </nav>
 
         <div class="hidden items-center gap-3 lg:flex">
-            <a href="{{ route('contact') }}" class="btn-outline rounded-xl px-4 py-2">Contact</a>
-            <a href="{{ $partnerUrl }}" class="btn-secondary rounded-xl">
-                Partner With Us
+            <a href="{{ $secondaryUrl }}" class="btn-outline rounded-xl px-4 py-2">{{ $secondaryLabel }}</a>
+            <a href="{{ $ctaUrl }}" class="btn-secondary rounded-xl">
+                {{ $ctaLabel }}
                 <x-icon name="arrow_forward" class="text-[18px]" />
             </a>
         </div>
@@ -95,8 +99,8 @@
                     @endforeach
                 @endforeach
             @endif
-            <a href="{{ route('contact') }}" class="btn-outline mt-2 w-full">Contact</a>
-            <a href="{{ $partnerUrl }}" class="btn-secondary w-full">Partner With Us</a>
+            <a href="{{ $secondaryUrl }}" class="btn-outline mt-2 w-full">{{ $secondaryLabel }}</a>
+            <a href="{{ $ctaUrl }}" class="btn-secondary w-full">{{ $ctaLabel }}</a>
         </nav>
     </div>
 </header>

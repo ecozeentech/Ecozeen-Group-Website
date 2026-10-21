@@ -17,7 +17,7 @@ class MediaAssetFactory extends Factory
 
         return [
             'disk' => 'public',
-            'path' => 'media/'.$filename,
+            'path' => $filename,
             'filename' => $filename,
             'original_filename' => fake()->word().'.jpg',
             'extension' => 'jpg',

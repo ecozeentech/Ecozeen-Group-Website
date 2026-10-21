@@ -1,5 +1,5 @@
 <x-layouts.admin title="Website Settings">
-    <x-admin.page-header title="Website Settings" description="Global site identity, contact details, and footer content. Edits apply immediately across the live site." />
+    <x-admin.page-header title="Website Settings" description="Logo, header buttons, footer copy, and contact details. Navigation links are edited in Navigation Menus. Changes apply immediately." />
 
     <form method="POST" action="{{ route('admin.settings.website.update') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -40,15 +40,39 @@
         </div>
 
         <div class="card space-y-5 p-6">
-            <h2 class="font-heading text-sm font-semibold text-ink">Announcement Bar</h2>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <h2 class="font-heading text-sm font-semibold text-ink">Header &amp; navigation</h2>
+                    <p class="mt-1 text-xs text-ink-muted">Header buttons live here. Menu links (About, Companies, dropdowns, footer columns) are edited in Navigation Menus.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    @if ($mainMenu)
+                        <a href="{{ route('admin.navigation.edit', $mainMenu) }}" class="btn-outline">Edit header menu</a>
+                    @endif
+                    @if ($footerMenu)
+                        <a href="{{ route('admin.navigation.edit', $footerMenu) }}" class="btn-outline">Edit footer menu</a>
+                    @endif
+                    <a href="{{ route('admin.navigation.index') }}" class="btn-outline">All menus</a>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <x-admin.input label="Primary button label" name="header_cta_label" :value="$settings->header_cta_label" placeholder="Partner With Us" />
+                <x-admin.input label="Primary button URL" name="header_cta_url" :value="$settings->header_cta_url" placeholder="/partner" />
+                <x-admin.input label="Secondary button label" name="header_secondary_label" :value="$settings->header_secondary_label" placeholder="Contact" />
+                <x-admin.input label="Secondary button URL" name="header_secondary_url" :value="$settings->header_secondary_url" placeholder="/contact" />
+            </div>
+        </div>
+
+        <div class="card space-y-5 p-6">
+            <h2 class="font-heading text-sm font-semibold text-ink">Announcement bar</h2>
             <x-admin.checkbox label="Show announcement bar" name="announcement_enabled" :checked="$settings->announcement_enabled" />
             <x-admin.input label="Announcement text" name="announcement_text" :value="$settings->announcement_text" />
         </div>
 
         <div class="card space-y-5 p-6">
-            <h2 class="font-heading text-sm font-semibold text-ink">Footer & Legal</h2>
-            <x-admin.textarea label="Footer text" name="footer_text" :value="$settings->footer_text" rows="2" />
-            <x-admin.textarea label="Footer legal text" name="footer_legal_text" :value="$settings->footer_legal_text" rows="2" hint="e.g. copyright line." />
+            <h2 class="font-heading text-sm font-semibold text-ink">Footer copy</h2>
+            <x-admin.textarea label="Footer description" name="footer_text" :value="$settings->footer_text" rows="2" hint="Short paragraph under the logo. Leave blank to use the supporting statement." />
+            <x-admin.textarea label="Extra legal note" name="footer_legal_text" :value="$settings->footer_legal_text" rows="2" hint="Optional. Do not paste the copyright line here — the footer already prints © year Site name. All rights reserved once." />
         </div>
 
         <div class="card space-y-5 p-6">

@@ -27,6 +27,12 @@
                     Media library
                 </a>
             @endcan
+            @can('settings.manage')
+                <a href="{{ route('admin.settings.website.edit') }}" class="btn-outline">
+                    <x-icon name="tune" class="text-brand-blue text-[18px]" />
+                    Header &amp; footer
+                </a>
+            @endcan
             @can('pages.create')
                 <a href="{{ route('admin.pages.create') }}" class="btn-secondary">
                     <x-icon name="add_circle" class="text-[18px]" />
@@ -35,6 +41,32 @@
             @endcan
         </div>
     </div>
+
+    @canany(['navigation.manage', 'settings.manage', 'pages.view'])
+        <section class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            @can('navigation.manage')
+                <a href="{{ route('admin.navigation.index') }}" class="card-hover p-5">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Site chrome</p>
+                    <h3 class="mt-1 font-heading text-base font-semibold text-ink">Header, nav &amp; footer</h3>
+                    <p class="mt-1 text-sm text-ink-muted">Rename links, reorder menus, and edit dropdowns without touching code.</p>
+                </a>
+            @endcan
+            @can('settings.manage')
+                <a href="{{ route('admin.settings.website.edit') }}" class="card-hover p-5">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Buttons &amp; copy</p>
+                    <h3 class="mt-1 font-heading text-base font-semibold text-ink">Header CTAs &amp; footer text</h3>
+                    <p class="mt-1 text-sm text-ink-muted">Change Partner With Us, Contact, logo, and the footer description.</p>
+                </a>
+            @endcan
+            @can('pages.view')
+                <a href="{{ route('admin.pages.index') }}" class="card-hover p-5">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Page canvas</p>
+                    <h3 class="mt-1 font-heading text-base font-semibold text-ink">Edit or delete sections</h3>
+                    <p class="mt-1 text-sm text-ink-muted">Every homepage and inner-page block has Edit and Delete in the visual editor.</p>
+                </a>
+            @endcan
+        </section>
+    @endcanany
 
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <a href="{{ route('admin.pages.index') }}" class="kpi-stripe card p-4">

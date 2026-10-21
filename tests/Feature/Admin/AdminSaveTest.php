@@ -87,6 +87,28 @@ class AdminSaveTest extends TestCase
         $this->assertSame(['youtube' => 'https://youtube.com/ecozeen'], $settings->social_links);
     }
 
+    public function test_website_settings_save_header_call_to_action_buttons(): void
+    {
+        WebsiteSetting::current();
+
+        $this->actingAs($this->admin)
+            ->put('/admin/settings/website', [
+                'site_name' => 'Ecozeen Group',
+                'header_cta_label' => 'Start a mandate',
+                'header_cta_url' => '/partner',
+                'header_secondary_label' => 'Talk to us',
+                'header_secondary_url' => '/contact',
+            ])
+            ->assertRedirect(route('admin.settings.website.edit'))
+            ->assertSessionHasNoErrors();
+
+        $settings = WebsiteSetting::current()->fresh();
+        $this->assertSame('Start a mandate', $settings->header_cta_label);
+        $this->assertSame('/partner', $settings->header_cta_url);
+        $this->assertSame('Talk to us', $settings->header_secondary_label);
+        $this->assertSame('/contact', $settings->header_secondary_url);
+    }
+
     public function test_company_placeholder_website_url_does_not_fail_validation(): void
     {
         $company = Company::factory()->create();

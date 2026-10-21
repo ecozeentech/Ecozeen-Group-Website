@@ -55,6 +55,10 @@ class MediaUploadTest extends TestCase
         $asset = MediaAsset::query()->first();
         $this->assertNotNull($asset);
         Storage::disk('public')->assertExists($asset->path);
+        $this->assertStringStartsWith('/media/', $asset->url());
+        $this->assertStringNotContainsString('/storage/', $asset->url());
+
+        $this->get($asset->url())->assertOk();
     }
 
     public function test_an_administrator_can_upload_a_png_to_the_media_library(): void

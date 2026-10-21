@@ -42,14 +42,35 @@ class MediaAsset extends Model
         return $this->belongsTo(User::class, 'uploaded_by');
     }
 
+    /**
+     * Host-relative public URL that does not depend on APP_URL or a
+     * storage symlink. Hostinger forbids HTTP access to /storage, so every
+     * public image is addressed as /media/{path}.
+     */
     public function url(): string
     {
-        return Storage::disk($this->disk)->url($this->path);
+        $path = ltrim((string) $this->path, '/');
+
+        if ($path === '') {
+            return asset('brand/ecozeen-mark.png');
+        }
+
+        return '/media/'.$path;
     }
 
     public function isImage(): bool
     {
-        return str_starts_with($this->mime_type, 'image/');
+        return str_starts_with((string) $this->mime_type, 'image/');
+    }
+
+    public function existsOnDisk(): bool
+    {
+        try {
+            return Storage::disk($this->disk ?: config('ecozeen.media.disk'))->exists($this->path);
+        } catch (\Throwable) {
+            return is_file(public_path('media/'.ltrim((string) $this->path, '/')))
+                || is_file(storage_path('app/public/'.ltrim((string) $this->path, '/')));
+        }
     }
 
     public function humanSize(): string

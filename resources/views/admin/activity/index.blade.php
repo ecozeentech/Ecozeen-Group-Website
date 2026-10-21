@@ -1,5 +1,18 @@
 <x-layouts.admin title="Activity Log">
-    <x-admin.page-header title="Activity Log" description="Audit trail of create/update/delete actions taken across the admin panel." />
+    <x-admin.page-header title="Activity Log" description="Audit trail of create/update/delete actions taken across the admin panel.">
+        <x-slot:actions>
+            @if (auth()->user()?->hasRole(['Super Administrator', 'Administrator']) && $logs->isNotEmpty())
+                <form method="POST" action="{{ route('admin.activity.clear') }}" onsubmit="return confirm('Clear the entire activity log? This cannot be undone.')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-destructive">
+                        <x-icon name="delete_sweep" class="text-[18px]" />
+                        Clear log
+                    </button>
+                </form>
+            @endif
+        </x-slot:actions>
+    </x-admin.page-header>
 
     <x-admin.filter-bar placeholder="">
         <select name="action" class="form-select sm:max-w-[160px]" onchange="this.form.submit()">
@@ -21,6 +34,9 @@
                         <th>User</th>
                         <th>Action</th>
                         <th>Description</th>
+                        @if (auth()->user()?->hasRole(['Super Administrator', 'Administrator']))
+                            <th class="text-right"> </th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -30,6 +46,11 @@
                             <td class="font-medium">{{ $log->user?->name ?? 'System' }}</td>
                             <td><x-admin.status-badge :status="$log->action" /></td>
                             <td class="text-ink-muted">{{ $log->description }}</td>
+                            @if (auth()->user()?->hasRole(['Super Administrator', 'Administrator']))
+                                <td class="text-right">
+                                    <x-admin.delete-button :action="route('admin.activity.destroy', $log)" label="Delete" confirm="Delete this activity entry?" class="btn-destructive text-xs" />
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

@@ -40,8 +40,12 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Store publicly served uploads inside public/media so they work
+            // on Hostinger without a storage symlink. The repo-root .htaccess
+            // forbids HTTP access to /storage, which previously produced
+            // broken images even when the files existed on disk.
+            'root' => public_path('media'),
+            'url' => '/media',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

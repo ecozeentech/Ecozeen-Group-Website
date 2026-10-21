@@ -47,5 +47,20 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        $this->ensurePublicMediaDirectory();
+    }
+
+    /**
+     * Uploads are stored in public/media so they can be served without a
+     * symlink. Create the folder on boot if the deploy omitted it.
+     */
+    private function ensurePublicMediaDirectory(): void
+    {
+        $directory = public_path('media');
+
+        if (! is_dir($directory)) {
+            @mkdir($directory, 0755, true);
+        }
     }
 }

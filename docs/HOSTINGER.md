@@ -286,6 +286,8 @@ cd ~/domains/yourdomain.com/public_html
 chmod -R ug+rwx storage bootstrap/cache
 find storage bootstrap/cache -type d -exec chmod 775 {} \;
 find storage bootstrap/cache -type f -exec chmod 664 {} \;
+mkdir -p public/media
+chmod -R ug+rwx public/media
 ```
 
 If artisan later errors with “permission denied” on a log or cache file,
@@ -320,12 +322,25 @@ You will be asked for:
 Save those credentials. This is the only Super Administrator until you
 invite more people from **Admin → Users**.
 
-Then cache config for production:
+Then publish public media and cache config for production:
 
 ```bash
-$PHP artisan storage:link
+$PHP artisan ecozeen:publish-media
 $PHP artisan config:cache
 $PHP artisan route:cache
+$PHP artisan view:cache
+```
+
+Public images are stored in `public/media` and served at `/media/{path}`. A
+storage symlink is **not** required. The repo-root `.htaccess` forbids HTTP
+access to `/storage`, which is why older `/storage/...` image URLs appeared
+broken. After pulling this update on an existing install, run:
+
+```bash
+$PHP artisan migrate --force
+$PHP artisan ecozeen:publish-media
+$PHP artisan cache:clear
+$PHP artisan config:cache
 $PHP artisan view:cache
 ```
 
@@ -420,6 +435,8 @@ git pull origin main
 
 /opt/alt/php83/usr/bin/php /usr/bin/composer2 install --no-dev --optimize-autoloader --no-interaction
 /opt/alt/php83/usr/bin/php artisan migrate --force
+/opt/alt/php83/usr/bin/php artisan ecozeen:publish-media
+/opt/alt/php83/usr/bin/php artisan cache:clear
 /opt/alt/php83/usr/bin/php artisan config:cache
 /opt/alt/php83/usr/bin/php artisan route:cache
 /opt/alt/php83/usr/bin/php artisan view:cache
@@ -479,7 +496,8 @@ in any file backup (hPanel backups usually cover it).
 | `SQLSTATE[HY000] [2002]` | Wrong `DB_HOST` | Use the host shown in hPanel (usually `localhost`) |
 | Login works then 419 | Session/HTTPS mismatch | `SESSION_SECURE_COOKIE=true`, Force HTTPS, `APP_URL=https://…`, `config:cache` |
 | `The stream or file could not be opened in append mode` | Bad permissions on `storage/logs` | Re-run Step 7 |
-| Admin image upload returns HTTP 500 | PHP `gd` disabled, or `storage/app/public` not writable / not linked | Enable **gd** (and `fileinfo`) in PHP extensions; `chmod -R 775 storage bootstrap/cache`; run `$PHP artisan storage:link`. Uploads now return a validation error instead of a 500 if processing still fails. |
+| Admin image upload returns HTTP 500 | PHP `gd` disabled, or `public/media` not writable | Enable **gd** (and `fileinfo`) in PHP extensions; `mkdir -p public/media && chmod -R 775 public/media storage bootstrap/cache`. Uploads now return a validation error instead of a 500 if processing still fails. |
+| Images show as broken on the site or in Media Library | Files were stored under `/storage`, which Hostinger blocks | Pull `main`, run `$PHP artisan migrate --force` and `$PHP artisan ecozeen:publish-media`. Image URLs are `/media/...` and no longer depend on a symlink. |
 
 ---
 
@@ -490,11 +508,12 @@ in any file backup (hPanel backups usually cover it).
   use the repo-root `.htaccess` instead.
 - **No Node.js build on the server** (or an unreliable one). Frontend
   assets ship in `public/build/` on `main`.
-- **Symlinks may be disabled** until you enable them in PHP functions.
-  `php artisan storage:link` needs `symlink()`; if it fails, in hPanel
-  **PHP Configuration → Disable Functions** remove `symlink` from the
-  list, or copy `storage/app/public` files into `public/storage` as a
-  fallback.
+- **Symlinks are not required for public images.** Uploads live in
+  `public/media` and are served at `/media/{path}` (with a Laravel
+  fallback for older files still sitting in `storage/app/public`).
+  `php artisan storage:link` is optional. If you still want it and it
+  fails, in hPanel **PHP Configuration → Disable Functions** remove
+  `symlink` from the list.
 
 If you later move to a VPS, follow `docs/DEPLOYMENT.md` instead of this
 file (Nginx root → `public/`, Supervisor queue worker, Redis, etc.).
