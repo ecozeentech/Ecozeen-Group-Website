@@ -43,12 +43,14 @@ class DashboardController extends Controller
         ];
 
         $recentInquiries = ContactInquiry::query()->latest()->limit(5)->get();
-        $recentActivity = ActivityLog::query()->with('user')->latest('created_at')->limit(10)->get();
+        $recentActivity = ActivityLog::query()->with('user')->latest('created_at')->limit(8)->get();
+        $recentPages = Page::query()->latest('updated_at')->limit(6)->get();
 
         return view('admin.dashboard', [
             'stats' => $stats,
             'recentInquiries' => $recentInquiries,
             'recentActivity' => $recentActivity,
+            'recentPages' => $recentPages,
         ]);
     }
 }

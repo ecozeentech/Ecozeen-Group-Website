@@ -409,9 +409,10 @@ scheduled tasks.
 
 ## Updating the site later
 
-Whenever `main` changes (including this Stitch redesign: new logo/favicon
-under `public/brand/`, rebuilt CSS in `public/build/`, and admin save
-fixes):
+Whenever `main` changes (including the uploaded HTML UI rebuild: public
+templates for home, about, companies, products, insights, partner, and
+contact; a light admin dashboard/directory/visual editor; rebuilt CSS in
+`public/build/`):
 
 ```bash
 cd ~/domains/yourdomain.com/public_html
@@ -432,16 +433,16 @@ Do **not** re-run `db:seed` on a live site that already has content.
 `PageSeeder` and `NavigationSeeder` replace matching pages and menus, so
 a re-seed would overwrite homepage and navigation edits made in admin.
 
-If you want the new **Partner With Us** page and Stitch nav labels on an
-existing site, add them in **Admin → Pages** and **Admin → Navigation
-Menus** instead of seeding. The uploaded wordmark and shield are already
-used as the fallback logo and favicon at `public/brand/` and
-`public/favicon.png` — no extra upload is required unless you prefer
-CMS-managed media.
+If you want the dedicated **About** (`/about`) and **Partner With Us**
+(`/partner`) templates on an existing site, those slugs must already
+exist as published CMS pages — add them in **Admin → Visual Editor**
+instead of re-seeding. The uploaded wordmark and shield remain the
+fallback logo and favicon at `public/brand/` and `public/favicon.png`.
 
 After this update, saving companies, products, settings, and pages in
 admin no longer wipes images or fails on empty `https://` social/website
-URL placeholders.
+URL placeholders. Public pages read live CMS records; they do not copy
+mock HTML addresses, phone numbers, or financial metrics.
 
 ---
 

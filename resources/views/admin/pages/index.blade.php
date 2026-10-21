@@ -1,5 +1,5 @@
-<x-layouts.admin title="Pages">
-    <x-admin.page-header title="Pages" description="Build and manage every page on the public website.">
+<x-layouts.admin title="Visual Editor">
+    <x-admin.page-header title="Website content — visual editor" description="Build and manage every page on the public website. Open a page to assemble sections in the canvas.">
         <x-slot:actions>
             @can('pages.create')
                 <a href="{{ route('admin.pages.create') }}" class="btn-secondary">+ New Page</a>

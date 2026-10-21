@@ -23,7 +23,8 @@ class CompanyController extends Controller
     public function index(): View
     {
         $companies = Company::query()
-            ->with('parentCompany')
+            ->with('parentCompany', 'logoMedia')
+            ->withCount(['products', 'services'])
             ->when(request('q'), fn ($q) => $q->where('name', 'like', '%'.request('q').'%'))
             ->when(request('status'), fn ($q) => $q->where('status', request('status')))
             ->orderBy('sort_order')
@@ -31,7 +32,14 @@ class CompanyController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('admin.companies.index', compact('companies'));
+        $stats = [
+            'total' => Company::count(),
+            'published' => Company::where('status', 'published')->count(),
+            'subsidiaries' => Company::where('type', '!=', 'holding')->count(),
+            'featured' => Company::where('is_featured', true)->count(),
+        ];
+
+        return view('admin.companies.index', compact('companies', 'stats'));
     }
 
     public function create(): View

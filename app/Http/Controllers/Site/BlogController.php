@@ -14,7 +14,12 @@ class BlogController extends Controller
     {
         $posts = BlogPost::query()
             ->published()
-            ->with('category', 'author')
+            ->with('category', 'author', 'coverMedia')
+            ->when(request('q'), fn ($q) => $q->where(function ($query) {
+                $query->where('title', 'like', '%'.request('q').'%')
+                    ->orWhere('excerpt', 'like', '%'.request('q').'%');
+            }))
+            ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
             ->paginate(9)
             ->withQueryString();
@@ -30,7 +35,12 @@ class BlogController extends Controller
         $posts = BlogPost::query()
             ->published()
             ->where('blog_category_id', $category->id)
-            ->with('category', 'author')
+            ->with('category', 'author', 'coverMedia')
+            ->when(request('q'), fn ($q) => $q->where(function ($query) {
+                $query->where('title', 'like', '%'.request('q').'%')
+                    ->orWhere('excerpt', 'like', '%'.request('q').'%');
+            }))
+            ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
             ->paginate(9)
             ->withQueryString();
@@ -47,7 +57,12 @@ class BlogController extends Controller
         $posts = BlogPost::query()
             ->published()
             ->whereHas('tags', fn ($q) => $q->where('blog_tags.id', $tag->id))
-            ->with('category', 'author')
+            ->with('category', 'author', 'coverMedia')
+            ->when(request('q'), fn ($q) => $q->where(function ($query) {
+                $query->where('title', 'like', '%'.request('q').'%')
+                    ->orWhere('excerpt', 'like', '%'.request('q').'%');
+            }))
+            ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
             ->paginate(9)
             ->withQueryString();
