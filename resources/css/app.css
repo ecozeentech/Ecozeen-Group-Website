@@ -88,7 +88,7 @@
     }
 
     .card {
-        @apply rounded-token border border-surface-border bg-surface shadow-level1;
+        @apply rounded-token border border-surface-border bg-surface shadow-level1 transition duration-200;
     }
 
     .card-hover {

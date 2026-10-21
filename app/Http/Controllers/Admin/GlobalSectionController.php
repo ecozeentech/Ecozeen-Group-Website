@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GlobalSectionRequest;
 use App\Models\GlobalSection;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class GlobalSectionController extends Controller
 {
+    use HandlesMediaUploads;
+
     public function index(): View
     {
         $this->authorize('pages.view');
@@ -57,14 +60,19 @@ class GlobalSectionController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'settings' => ['nullable', 'array'],
+            'image_media_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'image_media_id_upload' => ['nullable', 'image', 'max:8192'],
         ]);
+
+        $settings = $this->mergeSectionImageMedia(
+            $request,
+            PageSectionController::decodeJsonFields($globalSection->type, $data['settings'] ?? []),
+            isset($globalSection->settings['image_media_id']) ? (int) $globalSection->settings['image_media_id'] : null,
+        );
 
         $globalSection->update([
             'name' => $data['name'],
-            'settings' => SectionTypeRegistry::sanitize(
-                $globalSection->type,
-                PageSectionController::decodeJsonFields($globalSection->type, $data['settings'] ?? [])
-            ),
+            'settings' => SectionTypeRegistry::sanitize($globalSection->type, $settings),
         ]);
 
         ActivityLogger::log('updated', $globalSection, "Updated reusable section \"{$globalSection->name}\"");

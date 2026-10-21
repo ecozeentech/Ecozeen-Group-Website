@@ -25,7 +25,17 @@
                     @break
 
                 @case('int')
-                    <input type="number" id="{{ $fieldId }}" name="settings[{{ $field }}]" value="{{ $value }}" class="form-input">
+                    @if ($field === 'image_media_id')
+                        @php($currentImage = ! empty($value) ? \App\Models\MediaAsset::find($value) : null)
+                        <x-admin.media-picker
+                            label="Section image"
+                            field="image_media_id"
+                            :current="$currentImage"
+                            hint="Upload a new file or pick one from the media library. This replaces the numeric media ID for this section."
+                        />
+                    @else
+                        <input type="number" id="{{ $fieldId }}" name="settings[{{ $field }}]" value="{{ $value }}" class="form-input">
+                    @endif
                     @break
 
                 @case('url')

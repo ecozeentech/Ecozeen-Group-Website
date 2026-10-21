@@ -77,7 +77,7 @@
                                             — changes apply everywhere it's placed.
                                         </p>
                                     @else
-                                        <form method="POST" action="{{ route('admin.pages.sections.update', [$page, $section]) }}">
+                                        <form method="POST" action="{{ route('admin.pages.sections.update', [$page, $section]) }}" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             @include('admin.pages._section-fields', [

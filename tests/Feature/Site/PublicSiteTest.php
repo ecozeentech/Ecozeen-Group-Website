@@ -24,7 +24,11 @@ class PublicSiteTest extends TestCase
 
     public function test_the_homepage_returns_a_fallback_when_no_homepage_is_configured(): void
     {
-        $this->get('/')->assertOk();
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Infinite Possibilities.')
+            ->assertSee('Pillars of Operational Excellence')
+            ->assertSee('Initiate an Institutional Dialogue');
     }
 
     public function test_the_company_directory_lists_only_published_companies(): void

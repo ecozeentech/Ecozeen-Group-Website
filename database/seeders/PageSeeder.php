@@ -35,7 +35,7 @@ class PageSeeder extends Seeder
                 'settings' => [
                     'eyebrow' => 'Diversified Enterprise Conglomerate',
                     'heading' => "One Group.\nMultiple Solutions.\nInfinite Possibilities.",
-                    'subheading' => '<p>Ecozeen Group oversees a portfolio of operating businesses spanning financial technology, enterprise IT services, leisure, mining, and agriculture.</p>',
+                    'subheading' => '<p>Ecozeen Group connects technology, digital asset infrastructure, digital commerce, enterprise accounting, natural resources, and agro-allied ventures to power scalable growth across Africa and the United Kingdom.</p>',
                     'primary_label' => 'Explore Our Group',
                     'primary_url' => '/companies',
                     'secondary_label' => 'Partner With Us',
@@ -58,10 +58,23 @@ class PageSeeder extends Seeder
             [
                 'type' => 'mission_vision',
                 'settings' => [
-                    'mission_heading' => 'Our Mission',
-                    'mission_text' => '<p>To build and support businesses that create lasting value for the people and markets they serve.</p>',
-                    'vision_heading' => 'Our Vision',
-                    'vision_text' => '<p>A diversified group recognized for disciplined operations and long-term thinking across every business we own.</p>',
+                    'mission_heading' => 'Our Corporate Mission',
+                    'mission_text' => '<p>“To deliver innovative digital solutions that empower individuals and businesses.”</p>',
+                    'vision_heading' => 'Our Global Vision',
+                    'vision_text' => '<p>“To be a leading global brand in technology, finance, and beyond.”</p>',
+                ],
+            ],
+            [
+                'type' => 'core_values',
+                'settings' => [
+                    'heading' => 'Pillars of Operational Excellence',
+                    'items' => [
+                        ['title' => 'Integrity', 'icon' => 'balance', 'description' => 'Uncompromising adherence to regulatory compliance, investor transparency, and institutional ethics.'],
+                        ['title' => 'Innovation', 'icon' => 'psychology', 'description' => 'Pioneering proprietary software, high-throughput financial rails, and sustainable technology.'],
+                        ['title' => 'Customer Focus', 'icon' => 'groups', 'description' => 'Centering user safety, transactional liquidity, and friction-free enterprise client journeys.'],
+                        ['title' => 'Excellence', 'icon' => 'verified_user', 'description' => 'World-class engineering standards, zero-tolerance downtime, and continuous product iteration.'],
+                        ['title' => 'Growth', 'icon' => 'trending_up', 'description' => 'Fostering compounding value for stakeholders, employees, and the regional ecosystems we touch.'],
+                    ],
                 ],
             ],
             [

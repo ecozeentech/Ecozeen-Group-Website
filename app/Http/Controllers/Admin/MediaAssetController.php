@@ -37,12 +37,21 @@ class MediaAssetController extends Controller
     public function store(MediaUploadRequest $request, MediaUploadService $uploader): RedirectResponse
     {
         $collection = $request->input('collection');
+        $files = $request->file('files', []);
         $count = 0;
 
-        foreach ($request->file('files') as $file) {
-            $asset = $uploader->store($file, config('ecozeen.media.disk'), $collection);
+        foreach ($files as $file) {
+            if (! $file) {
+                continue;
+            }
+
+            $asset = $uploader->store($file, config('ecozeen.media.disk'), $collection, 'files');
             ActivityLogger::log('uploaded', $asset, "Uploaded media {$asset->original_filename}");
             $count++;
+        }
+
+        if ($count === 0) {
+            return back()->withErrors(['files' => 'Please choose at least one file to upload.']);
         }
 
         return redirect()->route('admin.media.index')->with('success', "{$count} file(s) uploaded successfully.");

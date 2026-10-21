@@ -479,6 +479,7 @@ in any file backup (hPanel backups usually cover it).
 | `SQLSTATE[HY000] [2002]` | Wrong `DB_HOST` | Use the host shown in hPanel (usually `localhost`) |
 | Login works then 419 | Session/HTTPS mismatch | `SESSION_SECURE_COOKIE=true`, Force HTTPS, `APP_URL=https://…`, `config:cache` |
 | `The stream or file could not be opened in append mode` | Bad permissions on `storage/logs` | Re-run Step 7 |
+| Admin image upload returns HTTP 500 | PHP `gd` disabled, or `storage/app/public` not writable / not linked | Enable **gd** (and `fileinfo`) in PHP extensions; `chmod -R 775 storage bootstrap/cache`; run `$PHP artisan storage:link`. Uploads now return a validation error instead of a 500 if processing still fails. |
 
 ---
 
