@@ -1,11 +1,33 @@
-<x-layouts.admin title="Companies">
-    <x-admin.page-header title="Companies & Subsidiaries" description="Manage Ecozeen Group's companies, subsidiaries, and business divisions.">
+<x-layouts.admin title="Business Directory">
+    <x-admin.page-header title="Corporate ecosystem &amp; subsidiary directory" description="Manage Ecozeen Group companies, subsidiaries, and business divisions.">
         <x-slot:actions>
             @can('companies.create')
-                <a href="{{ route('admin.companies.create') }}" class="btn-secondary">+ New Company</a>
+                <a href="{{ route('admin.companies.create') }}" class="btn-secondary">
+                    <x-icon name="add_circle" class="text-[18px]" />
+                    New company
+                </a>
             @endcan
         </x-slot:actions>
     </x-admin.page-header>
+
+    <section class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="kpi-stripe card p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">Registered entities</p>
+            <p class="mt-2 font-heading text-2xl font-bold text-ink">{{ $stats['total'] }}</p>
+        </div>
+        <div class="kpi-stripe card p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">Published</p>
+            <p class="mt-2 font-heading text-2xl font-bold text-ink">{{ $stats['published'] }}</p>
+        </div>
+        <div class="kpi-stripe card p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">Operating units</p>
+            <p class="mt-2 font-heading text-2xl font-bold text-ink">{{ $stats['subsidiaries'] }}</p>
+        </div>
+        <div class="kpi-stripe card p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">Featured</p>
+            <p class="mt-2 font-heading text-2xl font-bold text-ink">{{ $stats['featured'] }}</p>
+        </div>
+    </section>
 
     <x-admin.filter-bar placeholder="Search companies...">
         <select name="status" class="form-select sm:max-w-[160px]" onchange="this.form.submit()">
@@ -24,30 +46,45 @@
         </x-admin.empty-state>
     @else
         <div class="card overflow-x-auto">
+            <div class="flex items-center justify-between border-b border-surface-border px-4 py-3">
+                <h2 class="font-heading text-sm font-bold text-ink">Registered subsidiaries &amp; assets</h2>
+                <span class="text-xs text-ink-muted">{{ $companies->total() }} records</span>
+            </div>
             <table class="admin-table w-full">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Region</th>
+                        <th>Entity name &amp; wordmark</th>
+                        <th>Category / sector</th>
+                        <th>Regional jurisdiction</th>
+                        <th>Associated platforms</th>
                         <th>Status</th>
-                        <th>Featured</th>
-                        <th class="text-right">Actions</th>
+                        <th class="text-right">Quick actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($companies as $company)
                         <tr>
-                            <td class="font-medium">
-                                {{ $company->name }}
-                                @if ($company->parentCompany)
-                                    <span class="block text-xs text-ink-muted">Under {{ $company->parentCompany->name }}</span>
-                                @endif
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    @if ($company->logoMedia)
+                                        <img src="{{ $company->logoMedia->url() }}" alt="" class="h-8 w-8 rounded object-contain">
+                                    @else
+                                        <span class="flex h-8 w-8 items-center justify-center rounded bg-slate-100 text-[10px] font-bold text-ink">{{ strtoupper(substr($company->name, 0, 2)) }}</span>
+                                    @endif
+                                    <div>
+                                        <p class="font-medium">{{ $company->name }}</p>
+                                        @if ($company->parentCompany)
+                                            <p class="text-xs text-ink-muted">Under {{ $company->parentCompany->name }}</p>
+                                        @else
+                                            <p class="text-xs text-ink-muted">{{ \Illuminate\Support\Str::headline($company->type) }}</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </td>
-                            <td class="text-ink-muted">{{ \Illuminate\Support\Str::headline($company->type) }}</td>
-                            <td class="text-ink-muted">{{ $company->region }}</td>
+                            <td class="text-ink-muted">{{ $company->category ?: '—' }}</td>
+                            <td class="text-ink-muted">{{ $company->region ?: '—' }}</td>
+                            <td class="text-ink-muted">{{ $company->products_count }} products · {{ $company->services_count }} services</td>
                             <td><x-admin.status-badge :status="$company->status" /></td>
-                            <td>{{ $company->is_featured ? 'Yes' : 'No' }}</td>
                             <td class="text-right">
                                 <div class="inline-flex gap-2">
                                     <a href="{{ route('companies.show', $company) }}" target="_blank" class="btn-outline">View</a>

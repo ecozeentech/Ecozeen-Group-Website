@@ -3,6 +3,10 @@
         eyebrow="Institutional services"
         title="Our Services"
         description="Technology, consulting, and operational services delivered by Ecozeen Group companies."
+        :crumbs="[
+            ['label' => 'Home', 'url' => route('home')],
+            ['label' => 'Services'],
+        ]"
     />
 
     <section class="section-spacing">

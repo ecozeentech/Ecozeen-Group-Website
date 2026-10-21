@@ -13,9 +13,11 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->published()
-            ->with('company', 'categories')
+            ->with('company', 'categories', 'logoMedia', 'screenshotMedia')
             ->when(request('category'), fn ($q) => $q->whereHas('categories', fn ($c) => $c->where('slug', request('category'))))
-            ->orderBy('sort_order')->orderBy('name')
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->orderBy('name')
             ->paginate(12)
             ->withQueryString();
 

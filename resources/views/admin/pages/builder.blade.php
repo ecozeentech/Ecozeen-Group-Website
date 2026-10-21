@@ -1,5 +1,5 @@
-<x-layouts.admin :title="'Edit — '.$page->title">
-    <x-admin.page-header :title="$page->title" description="Visual page builder — configure settings and assemble sections.">
+<x-layouts.admin :title="'Visual Editor — '.$page->title">
+    <x-admin.page-header :title="$page->title" description="Canvas on the left, page inspector on the right. Add sections, configure fields, and publish when ready.">
         <x-slot:actions>
             @if ($page->status === 'published')
                 <a href="{{ $page->is_homepage ? route('home') : route('pages.show', $page->slug) }}" target="_blank" class="btn-outline">View Live</a>
@@ -11,11 +11,15 @@
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2">
             {{-- Sections --}}
-            <div class="card p-6">
-                <div class="flex items-center justify-between">
-                    <h2 class="font-heading text-sm font-semibold text-ink">Block editor ({{ $page->sections->count() }})</h2>
+            <div class="card overflow-hidden">
+                <div class="flex items-center justify-between border-b border-surface-border bg-slate-50 px-6 py-4">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Page canvas</p>
+                        <h2 class="font-heading text-sm font-semibold text-ink">Block editor ({{ $page->sections->count() }})</h2>
+                    </div>
                     <x-admin.status-badge :status="$page->status" />
                 </div>
+                <div class="p-6">
 
                 @if ($page->sections->isEmpty())
                     <p class="mt-4 text-sm text-ink-muted">No sections yet. Add your first section below.</p>
@@ -127,6 +131,7 @@
                         </form>
                     @endif
                 </div>
+                </div>
             </div>
 
             {{-- Revision history --}}
@@ -151,8 +156,13 @@
         </div>
 
         <div class="space-y-6">
-            <div class="card p-6">
-                <h2 class="font-heading text-sm font-semibold text-ink">Page Settings</h2>
+            <div class="card overflow-hidden">
+                <div class="border-b border-surface-border bg-slate-50 px-6 py-4">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-brand-blue">Inspector</p>
+                    <h2 class="font-heading text-sm font-semibold text-ink">Page settings</h2>
+                </div>
+                <div class="p-6">
+                <h2 class="sr-only">Page Settings</h2>
                 <form method="POST" action="{{ route('admin.pages.update', $page) }}" enctype="multipart/form-data" class="mt-4 space-y-4">
                     @csrf
                     @method('PUT')
@@ -176,6 +186,7 @@
 
                     <button type="submit" class="btn-primary w-full">Save Page Settings</button>
                 </form>
+                </div>
             </div>
         </div>
     </div>

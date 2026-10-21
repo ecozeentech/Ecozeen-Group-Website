@@ -12,16 +12,32 @@ class CompanyController extends Controller
     {
         $companies = Company::query()
             ->published()
-            ->whereNull('parent_company_id')
-            ->with('subsidiaries')
+            ->where('type', '!=', 'holding')
+            ->with('logoMedia')
+            ->when(request('q'), fn ($q) => $q->where('name', 'like', '%'.request('q').'%'))
             ->when(request('region'), fn ($q) => $q->where('region', request('region')))
+            ->when(request('category'), fn ($q) => $q->where('category', request('category')))
             ->orderBy('sort_order')->orderBy('name')
             ->paginate(12)
             ->withQueryString();
 
-        $regions = Company::published()->whereNotNull('region')->distinct()->pluck('region');
+        $regions = Company::published()
+            ->where('type', '!=', 'holding')
+            ->whereNotNull('region')
+            ->where('region', '!=', '')
+            ->distinct()
+            ->orderBy('region')
+            ->pluck('region');
 
-        return view('site.companies.index', compact('companies', 'regions'));
+        $categories = Company::published()
+            ->where('type', '!=', 'holding')
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('site.companies.index', compact('companies', 'regions', 'categories'));
     }
 
     public function show(Company $company): View

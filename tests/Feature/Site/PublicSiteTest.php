@@ -31,10 +31,12 @@ class PublicSiteTest extends TestCase
     {
         $published = Company::factory()->create(['name' => 'Published Subsidiary']);
         $draft = Company::factory()->draft()->create(['name' => 'Draft Subsidiary']);
+        Company::factory()->create(['name' => 'Holding Company Hidden', 'type' => 'holding']);
 
         $response = $this->get('/companies')->assertOk();
         $response->assertSee('Published Subsidiary');
         $response->assertDontSee('Draft Subsidiary');
+        $response->assertDontSee('Holding Company Hidden');
     }
 
     public function test_a_company_detail_page_is_reachable_by_slug(): void
@@ -95,6 +97,41 @@ class PublicSiteTest extends TestCase
         $page = Page::factory()->published()->create(['title' => 'About Ecozeen Group']);
 
         $this->get("/{$page->slug}")->assertOk()->assertSee('About Ecozeen Group');
+    }
+
+    public function test_the_about_slug_uses_the_composed_about_template(): void
+    {
+        Page::factory()->published()->create([
+            'slug' => 'about',
+            'title' => 'About Ecozeen Group',
+        ]);
+
+        $this->get('/about')
+            ->assertOk()
+            ->assertSee('About Ecozeen Group')
+            ->assertSee('Dual-jurisdiction operating model');
+    }
+
+    public function test_the_partner_slug_uses_the_composed_partner_template(): void
+    {
+        Page::factory()->published()->create([
+            'slug' => 'partner',
+            'title' => 'Partner With Us',
+        ]);
+
+        $this->get('/partner')
+            ->assertOk()
+            ->assertSee('Partner With Us')
+            ->assertSee('Official intake portal');
+    }
+
+    public function test_the_contact_page_does_not_render_fabricated_mock_addresses(): void
+    {
+        $this->get('/contact')
+            ->assertOk()
+            ->assertSee('Intelligent communications router')
+            ->assertDontSee('100 Bishopsgate')
+            ->assertDontSee('corporate@ecozeengroup.com');
     }
 
     public function test_a_draft_cms_page_404s(): void
