@@ -40,6 +40,7 @@ class CompanySeeder extends Seeder
                 'category' => 'Financial Technology',
                 'short_description' => 'A digital asset exchange and currency swap platform enabling fast, secure conversions between digital and fiat currencies.',
                 'description' => '<p>Ecozeen Swap is Ecozeen Group\'s financial technology platform for digital asset exchange, enabling users to convert between digital currencies and fiat with a focus on speed, security, and transparent pricing.</p>',
+                'website_url' => 'https://ecozeenswap.com',
                 'is_featured' => true,
             ],
             [
@@ -49,6 +50,7 @@ class CompanySeeder extends Seeder
                 'category' => 'Financial Technology',
                 'short_description' => 'A financial technology platform focused on cross-border payments and money movement for individuals and businesses.',
                 'description' => '<p>Transvoo is Ecozeen Group\'s payments technology business, building tools that make cross-border money movement simpler and more reliable for individuals and businesses.</p>',
+                'website_url' => 'https://transvoo.com',
                 'is_featured' => true,
             ],
             [
@@ -58,6 +60,7 @@ class CompanySeeder extends Seeder
                 'category' => 'Financial Technology',
                 'short_description' => 'Accounting and financial management software designed to help businesses track, reconcile, and report on their finances.',
                 'description' => '<p>AccountSwift develops accounting and financial management software that helps businesses track transactions, reconcile accounts, and generate financial reports.</p>',
+                'website_url' => 'https://accountswift.org',
                 'is_featured' => false,
             ],
             [
@@ -68,6 +71,7 @@ class CompanySeeder extends Seeder
                 'region' => 'United Kingdom',
                 'short_description' => 'Enterprise IT services and software delivery for clients across the United Kingdom and Europe.',
                 'description' => '<p>Ecozeen Tech UK delivers enterprise IT services — including software development, systems integration, and technology consulting — to clients across the United Kingdom and Europe.</p>',
+                'website_url' => 'https://ecozeentech.org',
                 'is_featured' => true,
             ],
             [
@@ -78,6 +82,7 @@ class CompanySeeder extends Seeder
                 'region' => 'Nigeria',
                 'short_description' => 'Enterprise IT services and software delivery for clients across Nigeria and the wider West African region.',
                 'description' => '<p>Ecozeen Tech Nigeria delivers enterprise IT services — including software development, systems integration, and technology consulting — to clients across Nigeria and the wider West African region.</p>',
+                'website_url' => 'https://ecozeentech.org',
                 'is_featured' => true,
             ],
             [

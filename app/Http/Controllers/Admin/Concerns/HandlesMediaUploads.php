@@ -26,7 +26,8 @@ trait HandlesMediaUploads
             $asset = app(MediaUploadService::class)->store(
                 $request->file("{$field}_upload"),
                 config('ecozeen.media.disk'),
-                $collection
+                $collection,
+                "{$field}_upload",
             );
 
             return $asset->id;
@@ -39,5 +40,25 @@ trait HandlesMediaUploads
         $value = $request->input($field);
 
         return $value !== null && $value !== '' ? (int) $value : null;
+    }
+
+    /**
+     * Section builders store image FKs inside the settings JSON. The media
+     * picker posts a sibling field (image_media_id / image_media_id_upload)
+     * so an upload is not trapped inside a nested settings[image_media_id]
+     * name that PHP cannot bind to a file input.
+     */
+    protected function mergeSectionImageMedia(Request $request, array $settings, ?int $currentImageId = null): array
+    {
+        if ($request->hasFile('image_media_id_upload') || $request->exists('image_media_id')) {
+            $settings['image_media_id'] = $this->resolveMediaId(
+                $request,
+                'image_media_id',
+                'pages',
+                $currentImageId
+            );
+        }
+
+        return $settings;
     }
 }

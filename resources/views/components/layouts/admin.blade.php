@@ -30,7 +30,7 @@
         </div>
 
         <div class="flex min-h-screen flex-1 flex-col">
-            <header class="flex h-16 items-center justify-between border-b border-surface-border bg-white px-4 lg:px-6">
+            <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-border bg-white/95 px-4 shadow-sm backdrop-blur lg:px-6">
                 <div class="flex items-center gap-3">
                     <button type="button" class="rounded-token p-2 text-ink lg:hidden" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle admin navigation">
                         <x-icon name="menu" />

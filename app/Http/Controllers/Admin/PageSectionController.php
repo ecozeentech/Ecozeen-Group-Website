@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSection;
@@ -20,6 +21,8 @@ use Illuminate\Validation\ValidationException;
  */
 class PageSectionController extends Controller
 {
+    use HandlesMediaUploads;
+
     public function store(Request $request, Page $page): RedirectResponse
     {
         $this->authorize('update', $page);
@@ -53,10 +56,18 @@ class PageSectionController extends Controller
             'is_visible' => ['nullable', 'boolean'],
             'visible_desktop' => ['nullable', 'boolean'],
             'visible_mobile' => ['nullable', 'boolean'],
+            'image_media_id' => ['nullable', 'integer', 'exists:media_assets,id'],
+            'image_media_id_upload' => ['nullable', 'image', 'max:8192'],
         ]);
 
+        $settings = $this->mergeSectionImageMedia(
+            $request,
+            $this->decodeJsonFields($section->type, $validated['settings'] ?? []),
+            isset($section->settings['image_media_id']) ? (int) $section->settings['image_media_id'] : null,
+        );
+
         $section->update([
-            'settings' => SectionTypeRegistry::sanitize($section->type, $this->decodeJsonFields($section->type, $validated['settings'] ?? [])),
+            'settings' => SectionTypeRegistry::sanitize($section->type, $settings),
             'is_visible' => $request->boolean('is_visible'),
             'visible_desktop' => $request->boolean('visible_desktop'),
             'visible_mobile' => $request->boolean('visible_mobile'),

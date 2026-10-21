@@ -14,7 +14,7 @@
             </div>
         </form>
     @else
-        <form method="POST" action="{{ route('admin.global-sections.update', $section) }}" class="card max-w-2xl space-y-5 p-6">
+        <form method="POST" action="{{ route('admin.global-sections.update', $section) }}" enctype="multipart/form-data" class="card max-w-2xl space-y-5 p-6">
             @csrf
             @method('PUT')
             <x-admin.input label="Name" name="name" :value="$section->name" required />
