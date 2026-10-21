@@ -87,6 +87,18 @@ class AdminSaveTest extends TestCase
         $this->assertSame(['youtube' => 'https://youtube.com/ecozeen'], $settings->social_links);
     }
 
+    public function test_website_settings_form_exposes_header_and_footer_editors(): void
+    {
+        WebsiteSetting::current();
+
+        $this->actingAs($this->admin)
+            ->get('/admin/settings/website')
+            ->assertOk()
+            ->assertSee('Header & navigation')
+            ->assertSee('Primary button label')
+            ->assertSee('Extra legal note');
+    }
+
     public function test_website_settings_save_header_call_to_action_buttons(): void
     {
         WebsiteSetting::current();

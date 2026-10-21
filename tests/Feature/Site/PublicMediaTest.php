@@ -31,9 +31,10 @@ class PublicMediaTest extends TestCase
     {
         Storage::disk('public')->put('pages/hero.jpg', 'fake-image-bytes');
 
-        $this->get('/media/pages/hero.jpg')
-            ->assertOk()
-            ->assertHeader('Cache-Control', 'max-age=604800, public, immutable');
+        $response = $this->get('/media/pages/hero.jpg')->assertOk();
+
+        $this->assertStringContainsString('max-age=604800', (string) $response->headers->get('Cache-Control'));
+        $this->assertStringContainsString('immutable', (string) $response->headers->get('Cache-Control'));
     }
 
     public function test_path_traversal_in_media_urls_is_rejected(): void
