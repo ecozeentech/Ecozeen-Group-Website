@@ -29,7 +29,7 @@
     :no-index="$page?->no_index ?? false"
 >
     {{-- HERO --}}
-    <section class="relative overflow-hidden border-b border-surface-border bg-white pt-12 pb-20 md:py-24">
+    <section class="relative overflow-hidden border-b border-surface-border bg-surface pt-12 pb-20 md:py-24">
         <div class="container-site grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
             <div class="flex flex-col items-start gap-6 lg:col-span-7">
                 <span class="inline-flex items-center gap-2.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-emerald-800">
@@ -39,7 +39,7 @@
                 <h1 class="display-xl">
                     @foreach ($headingLines as $i => $line)
                         @if ($i === count($headingLines) - 1)
-                            <span class="text-brand-blue underline decoration-emerald-300 decoration-4 underline-offset-4">{{ $line }}</span>
+                            <span class="{{ count($headingLines) > 1 ? 'text-brand-blue' : '' }}">{{ $line }}</span>
                         @else
                             {{ $line }}<br>
                         @endif

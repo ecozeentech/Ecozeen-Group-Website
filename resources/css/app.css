@@ -34,8 +34,62 @@
         scroll-behavior: smooth;
     }
 
+    html.dark {
+        color-scheme: dark;
+    }
+
     body {
         @apply bg-surface-canvas text-ink font-sans antialiased;
+    }
+
+    html.dark .site-header-logo img {
+        filter: brightness(0) invert(1);
+    }
+
+    html.dark .bg-white {
+        background-color: var(--color-surface);
+    }
+
+    html.dark .bg-white\/90,
+    html.dark .bg-white\/95 {
+        background-color: rgb(17 24 39 / 0.92);
+    }
+
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-100 {
+        background-color: #0f172a;
+    }
+
+    html.dark .bg-slate-200 {
+        background-color: #1e293b;
+    }
+
+    html.dark .text-slate-600,
+    html.dark .text-slate-700 {
+        color: var(--color-text-muted);
+    }
+
+    html.dark .border-slate-200,
+    html.dark .border-slate-300 {
+        border-color: var(--color-border);
+    }
+
+    html.dark .btn-outline {
+        background-color: transparent;
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+
+    html.dark .btn-outline:hover {
+        background-color: #1e293b;
+    }
+
+    html.dark .form-input,
+    html.dark .form-select,
+    html.dark .form-textarea {
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+        color: var(--color-text);
     }
 
     h1, h2, h3, h4, h5, h6 {

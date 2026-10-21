@@ -21,7 +21,7 @@
     $extraLegal = ($legal !== '' && ! $legalIsCopyright) ? $legal : null;
     $footerColumns = $footerMenu?->items ?? collect();
 @endphp
-<footer class="border-t border-surface-border bg-white" id="site-footer">
+<footer class="border-t border-surface-border bg-surface" id="site-footer">
     <div class="container-site py-12 lg:py-16">
         <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12">
             <div class="sm:col-span-2 lg:col-span-4">
@@ -100,18 +100,11 @@
             </div>
         @endif
 
-        <div class="mt-10 flex flex-col gap-3 border-t border-surface-border pt-6 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
+        <div class="mt-10 border-t border-surface-border pt-6 text-xs text-ink-muted">
             <p>{{ $copyrightLine }}</p>
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-                @if ($extraLegal)
-                    <p>{{ $extraLegal }}</p>
-                @endif
-                <a href="{{ route('contact') }}" class="hover:text-brand-blue">Contact</a>
-                <span class="inline-flex items-center gap-1.5 text-emerald-700">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
-                    All systems operational
-                </span>
-            </div>
+            @if ($extraLegal)
+                <p class="mt-2">{{ $extraLegal }}</p>
+            @endif
         </div>
     </div>
 </footer>

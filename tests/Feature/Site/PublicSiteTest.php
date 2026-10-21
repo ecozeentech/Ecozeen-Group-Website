@@ -168,5 +168,16 @@ class PublicSiteTest extends TestCase
 
         $this->assertSame(1, substr_count($html, 'All rights reserved'));
         $this->assertSame(1, substr_count($html, '© 2026 Ecozeen Group. All rights reserved.'));
+        $this->assertStringNotContainsString('All systems operational', $html);
+    }
+
+    public function test_the_public_header_includes_a_theme_toggle_and_does_not_underline_the_hero_title(): void
+    {
+        $html = $this->get('/')->assertOk()->getContent();
+
+        $this->assertStringContainsString('Switch between light and dark mode', $html);
+        $this->assertStringContainsString('ecozeen-theme', $html);
+        $this->assertStringNotContainsString('underline-offset-4', $html);
+        $this->assertStringNotContainsString('decoration-emerald-300', $html);
     }
 }

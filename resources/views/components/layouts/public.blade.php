@@ -13,6 +13,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('ecozeen-theme');
+                var dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.classList.toggle('dark', dark);
+                document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+            } catch (e) {}
+        })();
+    </script>
 
     <x-seo-meta
         :title="$seoTitle"
@@ -55,7 +65,7 @@
 
     <button
         type="button"
-        class="fixed bottom-6 right-6 z-40 hidden h-11 w-11 items-center justify-center rounded-full bg-brand-navy text-white shadow-level3 transition hover:bg-slate-800"
+        class="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-brand-navy text-white shadow-level3 transition hover:bg-slate-800"
         x-data="{ show: false }"
         x-init="window.addEventListener('scroll', () => { show = window.scrollY > 400 })"
         x-show="show"

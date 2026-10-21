@@ -22,4 +22,15 @@
         --section-spacing: {{ $spacingScale[$theme->section_spacing] ?? '6rem' }};
         --radius-base: {{ $radiusScale[$theme->radius_scale] ?? '0.5rem' }};
     }
+
+    html.dark {
+        --color-background: #0B1220;
+        --color-surface: #111827;
+        --color-border: #1E293B;
+        --color-text: #F1F5F9;
+        --color-text-muted: #94A3B8;
+        --color-secondary: #60A5FA;
+        --color-accent: #38BDF8;
+        --color-success: #34D399;
+    }
 </style>
