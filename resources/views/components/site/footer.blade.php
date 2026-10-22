@@ -2,13 +2,6 @@
 @php
     $footerMenu = \App\Services\NavigationService::menu('footer');
     $socialLinks = collect($settings->social_links ?? [])->filter();
-    $operatingCompanies = \App\Models\Company::query()
-        ->published()
-        ->where('type', '!=', 'holding')
-        ->orderBy('sort_order')
-        ->orderBy('name')
-        ->limit(8)
-        ->get();
     $copyright = '© '.now()->year.' '.($settings->site_name ?: 'Ecozeen Group').'. All rights reserved.';
     $legal = trim((string) $settings->footer_legal_text);
     $legalIsCopyright = $legal !== '' && (
@@ -29,17 +22,8 @@
                 <p class="mt-4 max-w-sm text-sm leading-relaxed text-ink-muted">
                     {{ $settings->footer_text ?: $settings->supporting_statement ?: 'A diversified group building and supporting operating businesses across technology, finance, and the real economy.' }}
                 </p>
-                @if ($settings->contact_email || $settings->contact_phone)
-                    <ul class="mt-5 space-y-1.5 text-sm text-ink">
-                        @if ($settings->contact_email)
-                            <li>
-                                <a href="mailto:{{ $settings->contact_email }}" class="hover:text-brand-blue">{{ $settings->contact_email }}</a>
-                            </li>
-                        @endif
-                        @if ($settings->contact_phone)
-                            <li>{{ $settings->contact_phone }}</li>
-                        @endif
-                    </ul>
+                @if ($settings->contact_phone)
+                    <p class="mt-5 text-sm text-ink">{{ $settings->contact_phone }}</p>
                 @endif
                 @if ($socialLinks->isNotEmpty())
                     <div class="mt-5 flex flex-wrap items-center gap-2">
@@ -68,19 +52,6 @@
                     </ul>
                 </div>
             @endforeach
-
-            @if ($operatingCompanies->isNotEmpty())
-                <div class="{{ $footerColumns->isEmpty() ? 'lg:col-span-8' : 'lg:col-span-4' }}">
-                    <p class="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">Operating companies</p>
-                    <ul class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                        @foreach ($operatingCompanies as $company)
-                            <li>
-                                <a href="{{ route('companies.show', $company) }}" class="text-sm text-ink transition hover:text-brand-blue">{{ $company->name }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
         </div>
 
         @if ($settings->newsletter_enabled)

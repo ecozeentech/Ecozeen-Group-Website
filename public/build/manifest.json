@@ -312,7 +312,7 @@
     "src": "node_modules/@fontsource/manrope/files/manrope-vietnamese-800-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CHHQGUbG.css",
+    "file": "assets/app-DlVlwSkQ.css",
     "name": "app",
     "names": [
       "app.css"
@@ -401,7 +401,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Qswo4EFu.js",
+    "file": "assets/app-CcHY_oDt.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

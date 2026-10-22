@@ -29,7 +29,12 @@ class AdminAccessTest extends TestCase
         $admin = User::factory()->create();
         $admin->assignRole('Super Administrator');
 
-        $this->actingAs($admin)->get('/admin')->assertOk();
+        $this->actingAs($admin)
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('Toggle admin navigation', false)
+            ->assertSee('admin-sidebar-mobile', false)
+            ->assertSee('Close admin menu', false);
     }
 
     public function test_read_only_analyst_cannot_create_a_page(): void

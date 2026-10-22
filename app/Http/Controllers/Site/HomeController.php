@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\MediaAsset;
 use App\Models\Page;
 use App\Models\Product;
-use App\Models\Service;
 use App\Models\WebsiteSetting;
 use Illuminate\View\View;
 
@@ -45,13 +44,6 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        $services = Service::query()
-            ->published()
-            ->orderByDesc('is_featured')
-            ->orderBy('sort_order')
-            ->limit(4)
-            ->get();
-
         $posts = BlogPost::query()
             ->published()
             ->with(['category', 'coverMedia', 'author'])
@@ -67,7 +59,6 @@ class HomeController extends Controller
             'values' => $values?->effectiveSettings() ?? [],
             'companies' => $companies,
             'products' => $products,
-            'services' => $services,
             'posts' => $posts,
             'companyCount' => Company::query()->published()->where('type', '!=', 'holding')->count(),
             'productCount' => Product::query()->published()->count(),

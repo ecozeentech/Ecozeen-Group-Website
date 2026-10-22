@@ -1,3 +1,4 @@
+@props(['variant' => 'desktop'])
 @php
     $inquiryCount = \App\Models\ContactInquiry::query()->where('status', 'new')->count();
     $groups = [
@@ -34,15 +35,29 @@
         ],
     ];
 @endphp
-<aside class="hidden w-64 shrink-0 flex-col border-r border-surface-border bg-white lg:flex" aria-label="Admin navigation">
-    <div class="flex h-16 items-center gap-3 border-b border-surface-border px-5">
-        <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-navy p-1">
-            <x-brand.logo-mark class="h-7 w-7 brightness-0 invert" />
-        </span>
-        <div>
-            <span class="block font-heading text-sm font-bold text-ink">Ecozeen Admin</span>
-            <span class="block text-[10px] font-medium uppercase tracking-wider text-ink-muted">Enterprise CMS</span>
+<aside
+    {{ $attributes->merge([
+        'class' => $variant === 'mobile'
+            ? 'admin-sidebar-mobile flex h-full min-h-0 w-full flex-col border-r border-surface-border bg-white'
+            : 'admin-sidebar-desktop hidden w-64 shrink-0 flex-col border-r border-surface-border bg-white lg:flex',
+    ]) }}
+    aria-label="Admin navigation"
+>
+    <div class="flex h-16 items-center justify-between gap-3 border-b border-surface-border px-5">
+        <div class="flex min-w-0 items-center gap-3">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-navy p-1">
+                <x-brand.logo-mark class="h-7 w-7 brightness-0 invert" />
+            </span>
+            <div>
+                <span class="block font-heading text-sm font-bold text-ink">Ecozeen Admin</span>
+                <span class="block text-[10px] font-medium uppercase tracking-wider text-ink-muted">Enterprise CMS</span>
+            </div>
         </div>
+        @if ($variant === 'mobile')
+            <button type="button" class="rounded-token p-1.5 text-ink hover:bg-slate-50" @click="sidebarOpen = false" aria-label="Close admin menu">
+                <x-icon name="close" />
+            </button>
+        @endif
     </div>
 
     @can('pages.create')

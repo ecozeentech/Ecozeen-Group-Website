@@ -29,7 +29,9 @@ class PublicSiteTest extends TestCase
             ->assertOk()
             ->assertSee('Infinite Possibilities.')
             ->assertSee('Pillars of Operational Excellence')
-            ->assertSee('Initiate an Institutional Dialogue');
+            ->assertSee('Initiate an Institutional Dialogue')
+            ->assertDontSee('Group Capabilities')
+            ->assertDontSee('Cross-Industry Institutional Services');
     }
 
     public function test_the_company_directory_lists_only_published_companies(): void
@@ -177,7 +179,21 @@ class PublicSiteTest extends TestCase
 
         $this->assertStringContainsString('Switch between light and dark mode', $html);
         $this->assertStringContainsString('ecozeen-theme', $html);
+        $this->assertStringNotContainsString('prefers-color-scheme', $html);
         $this->assertStringNotContainsString('underline-offset-4', $html);
         $this->assertStringNotContainsString('decoration-emerald-300', $html);
+    }
+
+    public function test_the_footer_does_not_list_operating_companies_or_the_support_email(): void
+    {
+        Company::factory()->create(['name' => 'Ecozeen Swap']);
+        WebsiteSetting::current()->update([
+            'contact_email' => 'support@ecozeengroup.com',
+        ]);
+
+        $html = $this->get('/insights')->assertOk()->getContent();
+
+        $this->assertStringNotContainsString('Operating companies', $html);
+        $this->assertStringNotContainsString('support@ecozeengroup.com', $html);
     }
 }

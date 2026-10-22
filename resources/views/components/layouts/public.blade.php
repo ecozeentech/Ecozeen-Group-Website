@@ -17,7 +17,7 @@
         (function () {
             try {
                 var saved = localStorage.getItem('ecozeen-theme');
-                var dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                var dark = saved === 'dark';
                 document.documentElement.classList.toggle('dark', dark);
                 document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
             } catch (e) {}

@@ -10,14 +10,14 @@ function currentTheme() {
 
     try {
         const saved = localStorage.getItem(THEME_KEY);
-        if (saved === 'light' || saved === 'dark') {
-            return saved;
+        if (saved === 'dark') {
+            return 'dark';
         }
     } catch (e) {
         // Ignore storage errors in private browsing.
     }
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'light';
 }
 
 function applyTheme(theme) {

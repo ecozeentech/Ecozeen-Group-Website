@@ -18,7 +18,6 @@
         'long-term thinking' => 'trending_up',
         'operational excellence' => 'verified_user',
     ];
-    $serviceIcons = ['cloud_sync', 'currency_exchange', 'agriculture', 'engineering'];
     $ukAddress = $settings->address_primary ?: 'Central London Financial District, United Kingdom';
     $ngAddress = $settings->address_secondary ?: 'Victoria Island Commercial Axis, Lagos, Nigeria';
 @endphp
@@ -332,37 +331,6 @@
                 </div>
                 <div class="mt-8 text-center">
                     <a href="{{ route('products.index') }}" class="btn-outline">Explore platform suite</a>
-                </div>
-            </div>
-        </section>
-    @endif
-
-    {{-- SERVICES --}}
-    @if ($services->isNotEmpty())
-        <section id="services" class="section-spacing border-b border-surface-border bg-slate-50">
-            <div class="container-site">
-                <div class="mb-14 max-w-2xl">
-                    <span class="text-[12px] font-bold uppercase tracking-widest text-brand-blue">Group Capabilities</span>
-                    <h2 class="mt-2 font-heading text-3xl font-bold text-ink">Cross-Industry Institutional Services</h2>
-                    <p class="mt-3 text-ink-muted">Leveraging synergistic corporate divisions to execute mission-critical mandates for governments, multinational enterprises, and growth-stage ventures.</p>
-                </div>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    @foreach ($services as $index => $service)
-                        @php($icon = $service->icon ?: ($serviceIcons[$index % count($serviceIcons)]))
-                        <a href="{{ route('services.show', $service) }}" class="flex flex-col justify-between rounded-xl border border-surface-border bg-white p-6 transition hover:border-brand-blue hover:shadow-level2">
-                            <div>
-                                <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-slate-50 text-brand-blue">
-                                    <x-icon :name="$icon" class="text-[26px]" />
-                                </div>
-                                <h3 class="font-heading text-lg font-semibold text-ink">{{ $service->name }}</h3>
-                                <p class="mt-2 text-sm text-ink-muted">{{ \Illuminate\Support\Str::limit($service->summary, 140) }}</p>
-                            </div>
-                            <ul class="mt-6 space-y-2 border-t border-surface-border pt-4 text-[11px] text-ink-muted">
-                                <li class="flex items-center gap-2"><x-icon name="check" class="text-brand-blue text-[14px]" /> Institutional delivery</li>
-                                <li class="flex items-center gap-2"><x-icon name="check" class="text-brand-blue text-[14px]" /> Group-backed execution</li>
-                            </ul>
-                        </a>
-                    @endforeach
                 </div>
             </div>
         </section>

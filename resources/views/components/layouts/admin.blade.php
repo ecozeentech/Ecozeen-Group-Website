@@ -10,32 +10,43 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full bg-surface-canvas text-ink" x-data="{ sidebarOpen: false }">
+<body class="min-h-screen bg-surface-canvas text-ink" x-data="{ sidebarOpen: false }" @keydown.escape.window="sidebarOpen = false">
     <div class="flex min-h-screen">
-        <x-admin.sidebar />
+        <x-admin.sidebar variant="desktop" />
 
         <div
             x-show="sidebarOpen"
-            x-cloak
+            x-transition.opacity
             class="fixed inset-0 z-40 bg-slate-900/50 lg:hidden"
+            style="display: none;"
             @click="sidebarOpen = false"
+            aria-hidden="true"
         ></div>
         <div
             x-show="sidebarOpen"
-            x-cloak
             x-transition
-            class="fixed inset-y-0 left-0 z-50 w-[260px] lg:hidden"
+            class="fixed inset-y-0 left-0 z-50 flex w-64 max-w-[85vw] lg:hidden"
+            style="display: none;"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Admin menu"
         >
-            <x-admin.sidebar />
+            <x-admin.sidebar variant="mobile" />
         </div>
 
-        <div class="flex min-h-screen flex-1 flex-col">
+        <div class="flex min-h-screen min-w-0 flex-1 flex-col">
             <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-surface-border bg-white/95 px-4 shadow-sm backdrop-blur lg:px-6">
-                <div class="flex items-center gap-3">
-                    <button type="button" class="rounded-token p-2 text-ink lg:hidden" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle admin navigation">
+                <div class="flex min-w-0 items-center gap-3">
+                    <button
+                        type="button"
+                        class="relative z-50 rounded-token p-2 text-ink lg:hidden"
+                        @click="sidebarOpen = !sidebarOpen"
+                        :aria-expanded="sidebarOpen.toString()"
+                        aria-label="Toggle admin navigation"
+                    >
                         <x-icon name="menu" />
                     </button>
-                    <div>
+                    <div class="min-w-0">
                         <p class="font-heading text-base font-bold text-ink">{{ $title ?? 'Dashboard' }}</p>
                         @if (isset($subtitle))
                             <p class="text-xs text-ink-muted">{{ $subtitle }}</p>
